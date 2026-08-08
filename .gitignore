@@ -17,3 +17,6 @@ Thumbs.db
 *.tsbuildinfo
 next-env.d.ts
 /prisma/*.db
+
+# 開發過程的診斷腳本
+chk*.mjs

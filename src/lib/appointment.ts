@@ -1133,10 +1133,13 @@ export async function hasRecentAppointmentContact(email: string, phone: string, 
 export async function isSlotTaken(slotAt: Date, excludeId?: string): Promise<boolean> {
   await ensureAppointmentTable();
   const rows = await db.$queryRawUnsafe<{ c: bigint }[]>(
+    // 用 LEFT() 而非 LIKE '__%'：LIKE 裡的 `_` 是單字元萬用字元，
+    // '__%' 會匹配到所有長度 >= 2 的字串（含真實預約 id），
+    // 導致 NOT LIKE 把全部的鎖都濾掉、撞號完全失效。
     `SELECT COUNT(*) AS c
        FROM appointment_slot_lock
       WHERE slot_at = ?
-        AND appointment_id NOT LIKE '__%'
+        AND LEFT(appointment_id, 2) <> '__'
         ${excludeId ? "AND appointment_id <> ?" : ""}`,
     ...(excludeId ? [slotAt, excludeId] : [slotAt]),
   );
@@ -1147,11 +1150,12 @@ export async function isSlotTaken(slotAt: Date, excludeId?: string): Promise<boo
 export async function getBookedSlots(from: Date, to: Date): Promise<Date[]> {
   await ensureAppointmentTable();
   const rows = await db.$queryRawUnsafe<{ slot_at: Date }[]>(
+    // 同上：不可用 LIKE '__%'，`_` 是萬用字元會把真實的鎖一起排除掉。
     `SELECT slot_at
        FROM appointment_slot_lock
       WHERE slot_at >= ?
         AND slot_at < ?
-        AND appointment_id NOT LIKE '__%'
+        AND LEFT(appointment_id, 2) <> '__'
       ORDER BY slot_at ASC`,
     from,
     to,
