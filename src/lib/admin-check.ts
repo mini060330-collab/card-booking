@@ -3,7 +3,9 @@
  *
  * 名單設在 `.env.local` 的 `ADMIN_EMAILS`（逗號分隔可多組）。
  */
+import { cookies } from "next/headers";
 import { auth, adminEmails } from "@/auth";
+import { ADMIN_SESSION_COOKIE, verifyAdminSessionToken } from "@/lib/admin-password";
 
 export type AdminCheckArgs = {
   email: string;
@@ -23,6 +25,11 @@ export async function getAdminCheckArgs(): Promise<AdminCheckArgs> {
  *    不是「全世界都進得去」。
  */
 export async function isCurrentUserAdmin(): Promise<boolean> {
+  // 路徑一：密碼登入（設了 ADMIN_PASSWORD 才有）
+  const store = await cookies();
+  if (verifyAdminSessionToken(store.get(ADMIN_SESSION_COOKIE)?.value)) return true;
+
+  // 路徑二：Google 帳號登入 + 信箱白名單
   const { email } = await getAdminCheckArgs();
   if (!email) return false;
   const list = adminEmails();

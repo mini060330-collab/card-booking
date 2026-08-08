@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { isCurrentUserAdmin } from "@/lib/admin-check";
 import {
   intentEmoji,
@@ -299,7 +300,8 @@ export default async function AppointmentsAdminPage({
 }: {
   searchParams: Promise<SearchParams>;
 }) {
-  if (!(await isCurrentUserAdmin())) throw new Error("權限不足");
+  // 未登入導去登入頁（原本是 throw，會變成看不懂的 500 錯誤頁）
+  if (!(await isCurrentUserAdmin())) redirect("/admin/login");
 
   const sp = await searchParams;
   const queue = QUEUES.some((item) => item.key === sp.queue) ? (sp.queue as AppointmentQueue) : "all";
@@ -377,6 +379,21 @@ export default async function AppointmentsAdminPage({
               : googleConfigured
                 ? "Google 日曆尚未綁定"
                 : "Google 日曆尚未設定"}
+            <a
+              href="/admin/logout"
+              style={{
+                marginLeft: 16,
+                fontSize: 13.5,
+                fontWeight: 700,
+                color: CIS.textMute,
+                textDecoration: "none",
+                border: `1px solid ${CIS.cardBorder}`,
+                borderRadius: 8,
+                padding: "6px 12px",
+              }}
+            >
+              登出
+            </a>
           </div>
         </div>
 
