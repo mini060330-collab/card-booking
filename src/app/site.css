@@ -1,0 +1,648 @@
+:root {
+  /* 暖米粉色系：與 LINE 分享縮圖同一套顏色 */
+  --taiching-blue: #F6C2B7;        /* 柔粉：圖示底、卡片上緣 */
+  --taiching-blue-dark: #A84A3E;   /* 磚紅：小標、強調字 */
+  --taiching-navy: #6B3A30;        /* 暖褐：深色區塊、標題 */
+  --taiching-orange: #E3A45E;      /* 琥珀：主要按鈕 */
+  --taiching-yellow: #FBDCD3;      /* 淺粉：徽章 */
+  --taiching-gray: #4A332E;        /* 內文 */
+  --taiching-white: #FFFFFF;
+
+  --hero-top: #FAEEE8;             /* 首圖：淺暖米，讓深色西裝跳出來 */
+  --hero-bottom: #F4D8D0;
+  --text-soft: #6E5650;
+
+  --line-green: #06C755;
+  --section-bg-alt: #FAEEE8;
+  --max-width: 1080px;
+}
+
+.qj-site * { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+.qj-site {
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+  color: var(--taiching-gray);
+  background: var(--taiching-white);
+  line-height: 1.7;
+}
+
+.qj-site img { max-width: 100%; display: block; }
+
+.qj-site .container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.qj-site a { color: inherit; text-decoration: none; }
+
+.qj-site ul { list-style: none; }
+
+/* ---------- Top nav ---------- */
+.qj-site .qj-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--taiching-navy);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+.qj-site .qj-nav .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+.qj-site .qj-nav .qj-brand {
+  color: var(--taiching-white);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+}
+
+.qj-site .qj-nav .qj-brand span {
+  color: var(--taiching-yellow);
+}
+
+.qj-site .topnav-links {
+  display: flex;
+  gap: 28px;
+}
+
+.qj-site .topnav-links a {
+  color: var(--taiching-white);
+  font-size: 0.95rem;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.qj-site .topnav-links a:hover { opacity: 1; color: var(--taiching-yellow); }
+
+.qj-site .topnav-cta {
+  display: flex;
+  gap: 10px;
+}
+
+.qj-site .topnav-cta a {
+  font-size: 0.85rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.qj-site .btn-line {
+  background: var(--line-green);
+  color: var(--taiching-white) !important;
+}
+
+.qj-site .btn-tel-outline {
+  border: 1px solid var(--taiching-white);
+  color: var(--taiching-white) !important;
+}
+
+@media (max-width: 760px) {
+  .qj-site .topnav-links { display: none; }
+}
+
+/* ---------- Hero ---------- */
+.qj-site .hero {
+  background: linear-gradient(160deg, var(--hero-top) 0%, var(--hero-bottom) 100%);
+  color: var(--taiching-gray);
+  padding: 64px 0 56px;
+}
+
+.qj-site .hero .container {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  flex-wrap: wrap;
+}
+
+.qj-site .hero-photo-wrap {
+  flex: 0 0 auto;
+}
+
+.qj-site .hero-photo {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 5px solid var(--taiching-white);
+  object-fit: cover;
+  background: var(--taiching-blue);
+  box-shadow: 0 12px 30px rgba(107, 58, 48, 0.18);
+}
+
+.qj-site .hero-photo-placeholder {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 5px solid var(--taiching-yellow);
+  background: linear-gradient(135deg, var(--taiching-blue), var(--taiching-blue-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: var(--taiching-white);
+}
+
+.qj-site .hero-text { flex: 1 1 320px; }
+
+.qj-site .hero-eyebrow {
+  display: inline-block;
+  background: var(--taiching-blue-dark);
+  color: var(--taiching-white);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+.qj-site .hero-text h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--taiching-navy);
+  margin-bottom: 8px;
+}
+
+.qj-site .hero-text .role {
+  font-size: 1.15rem;
+  color: var(--taiching-blue-dark);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.qj-site .hero-text p.tagline {
+  font-size: 1.05rem;
+  color: var(--text-soft);
+  max-width: 480px;
+  margin-bottom: 28px;
+}
+
+.qj-site .hero-cta {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.qj-site .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.qj-site .btn:hover { transform: translateY(-2px); }
+
+.qj-site .btn-line-lg {
+  background: var(--line-green);
+  color: var(--taiching-white);
+  box-shadow: 0 6px 16px rgba(6,199,85,0.35);
+}
+
+.qj-site .btn-tel-lg {
+  background: var(--taiching-orange);
+  color: #4A251E;
+  box-shadow: 0 6px 16px rgba(227,164,94,0.4);
+}
+
+/* ---------- Section shared ---------- */
+.qj-site section { padding: 72px 0; }
+
+.qj-site .section-alt { background: var(--section-bg-alt); }
+
+.qj-site .section-head {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.qj-site .section-head .eyebrow {
+  color: var(--taiching-blue-dark);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.qj-site .section-head h2 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--taiching-navy);
+  margin-bottom: 10px;
+}
+
+.qj-site .section-head p {
+  color: var(--taiching-gray);
+  opacity: 0.8;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* ---------- Service area ---------- */
+.qj-site .area-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.qj-site .area-card {
+  background: var(--taiching-white);
+  border: 1px solid #EEDDD6;
+  border-radius: 16px;
+  padding: 28px 20px;
+  text-align: center;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.qj-site .area-card:hover {
+  box-shadow: 0 12px 28px rgba(107,58,48,0.12);
+  transform: translateY(-4px);
+}
+
+.qj-site .area-card .icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--taiching-blue);
+  color: var(--taiching-navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin: 0 auto 16px;
+}
+
+.qj-site .area-card h3 {
+  color: var(--taiching-navy);
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+}
+
+.qj-site .area-card p {
+  font-size: 0.92rem;
+  opacity: 0.85;
+}
+
+@media (max-width: 960px) {
+  .qj-site .area-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .qj-site .area-grid { grid-template-columns: 1fr; }
+  .qj-site .area-card { aspect-ratio: auto; }
+}
+
+/* ---------- Track record ---------- */
+.qj-site .record-banner {
+  background: linear-gradient(120deg, var(--taiching-navy), var(--taiching-blue-dark));
+  border-radius: 20px;
+  padding: 48px 32px;
+  color: var(--taiching-white);
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+
+.qj-site .record-badge {
+  background: var(--taiching-yellow);
+  color: var(--taiching-navy);
+  font-weight: 800;
+  font-size: 2.6rem;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1.1;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+}
+
+.qj-site .record-badge small {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.qj-site .record-text h3 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.qj-site .record-text p {
+  opacity: 0.9;
+  max-width: 480px;
+}
+
+.qj-site .award-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.qj-site .award-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--taiching-white);
+  border: 1px solid #EEDDD6;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-weight: 700;
+  color: var(--taiching-navy);
+  font-size: 0.95rem;
+  box-shadow: 0 4px 14px rgba(107,58,48,0.08);
+}
+
+.qj-site .award-item .award-year {
+  background: var(--taiching-orange);
+  color: var(--taiching-navy);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+/* ---------- Services ---------- */
+.qj-site .service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.qj-site .service-card {
+  background: var(--taiching-white);
+  border-radius: 16px;
+  padding: 32px 26px;
+  border-top: 4px solid var(--taiching-blue);
+  box-shadow: 0 4px 18px rgba(107,58,48,0.06);
+}
+
+.qj-site .service-card:nth-child(2) { border-top-color: var(--taiching-orange); }
+.qj-site .service-card:nth-child(3) { border-top-color: var(--taiching-yellow); }
+
+.qj-site .service-card .num {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: var(--taiching-blue-dark);
+  margin-bottom: 12px;
+}
+
+.qj-site .service-card h3 {
+  color: var(--taiching-navy);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.qj-site .service-card p {
+  font-size: 0.92rem;
+  opacity: 0.85;
+}
+
+@media (max-width: 760px) {
+  .qj-site .service-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------- Booking ---------- */
+.qj-site .booking-wrap {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 40px;
+  align-items: stretch;
+}
+
+.qj-site .booking-form {
+  background: var(--taiching-white);
+  border: 1px solid #EEDDD6;
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.qj-site .form-row { margin-bottom: 18px; }
+
+.qj-site .form-row label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--taiching-navy);
+  margin-bottom: 6px;
+}
+
+.qj-site .form-row input, .qj-site .form-row select, .qj-site .form-row textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #E4CFC6;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--taiching-gray);
+}
+
+.qj-site .form-row input:focus, .qj-site .form-row select:focus, .qj-site .form-row textarea:focus {
+  outline: none;
+  border-color: var(--taiching-blue);
+}
+
+.qj-site .form-row textarea { resize: vertical; min-height: 90px; }
+
+.qj-site .btn-submit {
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  background: var(--taiching-navy);
+  color: var(--taiching-white);
+  padding: 14px;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 700;
+  transition: background 0.2s;
+}
+
+.qj-site .btn-submit:hover { background: var(--taiching-blue-dark); }
+
+.qj-site .form-note {
+  margin-top: 14px;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  text-align: center;
+}
+
+.qj-site .form-success {
+  display: none;
+  margin-top: 14px;
+  background: #E9F9EF;
+  color: #1a7a3d;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.qj-site .booking-side {
+  background: linear-gradient(160deg, var(--taiching-navy), var(--taiching-blue-dark));
+  border-radius: 16px;
+  padding: 32px;
+  color: var(--taiching-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.qj-site .booking-side h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.qj-site .booking-side p { opacity: 0.9; font-size: 0.95rem; }
+
+.qj-site .booking-side .contact-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.qj-site .booking-side .btn { width: 100%; justify-content: center; }
+
+@media (max-width: 860px) {
+  .qj-site .booking-wrap { grid-template-columns: 1fr; }
+}
+
+/* ---------- Footer ---------- */
+.qj-site footer {
+  background: var(--taiching-navy);
+  color: var(--taiching-white);
+  padding: 36px 0;
+  text-align: center;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.qj-site footer .footer-brand {
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--taiching-yellow);
+  margin-bottom: 8px;
+}
+
+/* ---------- Floating LINE button (mobile) ---------- */
+.qj-site .float-line {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  background: var(--line-green);
+  color: var(--taiching-white);
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.8rem;
+  box-shadow: 0 8px 20px rgba(6,199,85,0.4);
+  z-index: 200;
+}
+
+/* ---------- 手機版（640px 以下） ---------- */
+@media (max-width: 640px) {
+  .qj-site .container { padding: 0 16px; }
+
+  /* 導覽列：品牌不換行，按鈕縮小 */
+  .qj-site .qj-nav .container { height: 54px; padding: 0 12px; }
+  .qj-site .qj-nav .qj-brand {
+    font-size: 0.82rem;
+    white-space: nowrap;
+    letter-spacing: 0;
+  }
+  .qj-site .topnav-cta { gap: 6px; }
+  .qj-site .topnav-cta a { font-size: 0.75rem; padding: 6px 11px; }
+
+  /* 首圖：整體置中直排 */
+  .qj-site .hero { padding: 32px 0 36px; }
+  .qj-site .hero .container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+  }
+  .qj-site .hero-photo, .qj-site .hero-photo-placeholder {
+    width: 150px;
+    height: 150px;
+    border-width: 4px;
+  }
+  .qj-site .hero-photo-placeholder { font-size: 3rem; }
+  .qj-site .hero-text { flex: 1 1 auto; width: 100%; }
+  .qj-site .hero-eyebrow { font-size: 0.78rem; padding: 5px 12px; margin-bottom: 12px; }
+  .qj-site .hero-text h1 { font-size: 1.9rem; }
+  .qj-site .hero-text .role { font-size: 1rem; margin-bottom: 12px; }
+  .qj-site .hero-text p.tagline {
+    font-size: 0.92rem;
+    margin: 0 auto 22px;
+    max-width: 100%;
+  }
+  .qj-site .hero-cta { justify-content: center; gap: 10px; }
+  .qj-site .btn { padding: 12px 20px; font-size: 0.92rem; }
+
+  /* 各區塊 */
+  .qj-site section { padding: 44px 0; }
+  .qj-site .section-head { margin-bottom: 28px; }
+  .qj-site .section-head h2 { font-size: 1.5rem; }
+  .qj-site .section-head .eyebrow { font-size: 0.78rem; }
+  .qj-site .section-head p { font-size: 0.9rem; }
+
+  .qj-site .area-card { padding: 24px 18px; }
+  .qj-site .area-card h3 { font-size: 1.05rem; }
+  .qj-site .area-card p { font-size: 0.88rem; }
+
+  /* 戰績 */
+  .qj-site .record-banner { padding: 32px 20px; gap: 20px; }
+  .qj-site .record-badge { width: 104px; height: 104px; font-size: 2rem; }
+  .qj-site .record-badge small { font-size: 0.8rem; }
+  .qj-site .record-text h3 { font-size: 1.25rem; }
+  .qj-site .record-text p { font-size: 0.9rem; }
+  .qj-site .award-item { font-size: 0.85rem; padding: 8px 14px; }
+
+  /* 服務項目與預約 */
+  .qj-site .service-card { padding: 26px 20px; }
+  .qj-site .service-card h3 { font-size: 1.1rem; }
+  .qj-site .booking-form, .qj-site .booking-side { padding: 24px 20px; }
+
+  /* 浮動 LINE 按鈕縮小，避免蓋住內文 */
+  .qj-site .float-line {
+    width: 48px;
+    height: 48px;
+    right: 12px;
+    bottom: 12px;
+    font-size: 0.68rem;
+  }
+
+  /* 頁尾留空間給浮動按鈕 */
+  .qj-site footer { padding: 28px 0 76px; }
+  .qj-site footer p { font-size: 0.8rem; }
+}
