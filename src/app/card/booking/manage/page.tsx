@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import BookingManageClient from "./BookingManageClient";
 
 export const metadata: Metadata = {
-  title: "確認與管理預約｜小明（王小明）",
-  description: "確認出席、查看時間，或管理與小明的預約。",
+  title: "確認與管理預約｜邱靜慧（邱姐）",
+  description: "確認出席、查看時間，或管理與邱姐的預約。",
   robots: { index: false, follow: false },
 };
 

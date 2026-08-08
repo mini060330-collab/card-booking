@@ -124,8 +124,16 @@ export function validateBookingModeAndQualification(input: {
     requireQualification(qualification, "propertyAddress", "請填寫待售物件地址或所在區域。");
     requireQualification(qualification, "purpose", "請填寫出售原因或希望達成的目標。");
   }
-  if (intent.includes("legal")) {
-    requireQualification(qualification, "legalTopic", "請簡述要諮詢的法律或產權問題。");
+  if (intent.includes("asset")) {
+    requireQualification(qualification, "purpose", "請簡述目前的資產狀況與想達成的目標。");
+    requireQualification(qualification, "budget", "請填寫可動用資金或貸款狀況。");
+  }
+  if (intent.includes("tax")) {
+    requireQualification(qualification, "legalTopic", "請簡述要諮詢的稅務問題。");
+  }
+  if (intent.includes("reno")) {
+    requireQualification(qualification, "propertyAddress", "請填寫房子所在區域。");
+    requireQualification(qualification, "purpose", "請簡述想施作的裝潢項目。");
   }
   if (intent.includes("other")) {
     requireQualification(qualification, "purpose", "請簡述這次預約的目的。");

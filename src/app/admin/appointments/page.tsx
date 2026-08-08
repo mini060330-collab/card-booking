@@ -756,4 +756,4 @@ export default async function AppointmentsAdminPage({
   );
 }
 
-export const metadata = { title: "預約營運工作區 | OO 學院後台" };
+export const metadata = { title: "預約營運工作區 | 預約管理後台" };

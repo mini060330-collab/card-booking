@@ -9,6 +9,7 @@ import {
   type FormEvent,
   type RefCallback,
 } from "react";
+import { OWNER } from "@/config/owner";
 import {
   BOOKING_CONFIRMATION_HOLD_MINUTES,
   BOOKING_MODES,
@@ -46,7 +47,7 @@ type IntentOption = {
   key: string;
   label: string;
   description: string;
-  apiIntent: "buy" | "sell" | "rent" | "legal" | "interview" | "other";
+  apiIntent: "buy" | "sell" | "asset" | "tax" | "reno" | "rent" | "interview" | "other";
 };
 
 function readCookie(name: string): string {
@@ -60,17 +61,19 @@ function readGaClientId(): string {
 }
 
 const MODE_DESCRIPTIONS: Record<BookingMode, string> = {
-  realtor: "買賣、租賃、房產法律或其他不動產問題",
+  realtor: "買賣、租賃、資產配置、稅務或其他不動產問題",
   collaboration: "拍片、課程、品牌、媒體或商務合作",
-  interview: "應徵OO 房屋或OO 學院相關職務",
+  interview: `應徵${OWNER.company}相關職務`,
 };
 
 const MODE_INTENTS: Record<BookingMode, IntentOption[]> = {
   realtor: [
     { key: "buy", label: "買房", description: "找自住、置產或換屋物件", apiIntent: "buy" },
     { key: "sell", label: "賣房", description: "估價、出售或換屋規劃", apiIntent: "sell" },
+    { key: "asset", label: "資產配置", description: "買賣時機、資金與置產規劃", apiIntent: "asset" },
+    { key: "tax", label: "稅務諮詢", description: "房地合一稅、土增稅、繼承過戶", apiIntent: "tax" },
+    { key: "reno", label: "簡易裝潢", description: "輕裝潢、局部翻新、抓預算", apiIntent: "reno" },
     { key: "rent", label: "租賃", description: "找出租物件或委託出租", apiIntent: "rent" },
-    { key: "legal", label: "房產法律", description: "繼承、產權、買賣糾紛", apiIntent: "legal" },
     { key: "other", label: "其他房產問題", description: "不確定分類也可以先說明", apiIntent: "other" },
   ],
   collaboration: [
@@ -85,9 +88,9 @@ const MODE_INTENTS: Record<BookingMode, IntentOption[]> = {
 };
 
 const MEET_TYPES_BY_MODE: Record<BookingMode, readonly string[]> = {
-  realtor: ["office", "hq", "studio", "phone", "video", "custom"],
-  collaboration: ["studio", "hq", "video", "phone", "custom"],
-  interview: ["office", "hq", "video", "phone"],
+  realtor: ["office", "phone", "video", "custom"],
+  collaboration: ["video", "phone", "custom"],
+  interview: ["office", "video", "phone"],
 };
 
 const TW_OFFSET_MS = 8 * 60 * 60_000;
@@ -147,7 +150,7 @@ function qualificationFields(mode: BookingMode, intent: string) {
     return [
       { key: "organization", label: "公司／單位名稱", placeholder: "例：XX 品牌、XX 媒體", required: true },
       { key: "role", label: "你的職稱／角色", placeholder: "例：行銷經理、製作人", required: true },
-      { key: "purpose", label: "希望合作的內容", placeholder: "請說明形式、對象與希望小明參與的部分", required: true, multiline: true },
+      { key: "purpose", label: "希望合作的內容", placeholder: "請說明形式、對象與希望邱姐參與的部分", required: true, multiline: true },
       { key: "targetDate", label: "預計合作日期", placeholder: "例：8 月中、尚未確定", required: true },
     ];
   }
@@ -161,25 +164,39 @@ function qualificationFields(mode: BookingMode, intent: string) {
   }
   if (intent === "buy" || intent === "rent") {
     return [
-      { key: "area", label: "希望區域", placeholder: "例：北屯、西屯、七期", required: true },
-      { key: "budget", label: intent === "buy" ? "購屋預算" : "每月租金預算", placeholder: "例：1,500 萬；每月 30,000 元", required: true },
+      { key: "area", label: "希望區域", placeholder: "例：三民、左營、鳳山、苓雅", required: true },
+      { key: "budget", label: intent === "buy" ? "購屋預算" : "每月租金預算", placeholder: "例：1,200 萬；每月 20,000 元", required: true },
       { key: "purpose", label: "需求重點", placeholder: "例：自住三房、有車位、近學區", required: true, multiline: true },
       { key: "targetDate", label: intent === "buy" ? "預計購屋時間" : "預計入住時間", placeholder: "例：3 個月內", required: true },
     ];
   }
   if (intent === "sell") {
     return [
-      { key: "propertyAddress", label: "物件大約位置", placeholder: "例：中正區範例路，填到路名即可", required: true },
+      { key: "propertyAddress", label: "物件大約位置", placeholder: "例：三民區建工路，填到路名即可", required: true },
       { key: "propertyType", label: "物件類型", placeholder: "例：電梯大樓三房、透天", required: true },
       { key: "purpose", label: "出售原因／期待", placeholder: "例：換屋，希望先了解行情與銷售期", required: true, multiline: true },
       { key: "targetDate", label: "希望出售時間", placeholder: "例：3 個月內、先評估", required: true },
     ];
   }
-  if (intent === "legal") {
+  if (intent === "asset") {
     return [
-      { key: "legalTopic", label: "問題類型", placeholder: "例：繼承、共有、漏水、買賣糾紛", required: true },
-      { key: "purpose", label: "事情摘要", placeholder: "請簡述已發生的情況與目前卡住的地方", required: true, multiline: true },
-      { key: "targetDate", label: "是否有期限", placeholder: "例：8/20 前要回覆；目前沒有", required: true },
+      { key: "purpose", label: "目前的狀況", placeholder: "例：手上兩間，想評估要不要賣一間換大的", required: true, multiline: true },
+      { key: "budget", label: "可動用資金／貸款狀況", placeholder: "例：自備 300 萬、目前還有房貸", required: true },
+      { key: "targetDate", label: "希望什麼時候處理", placeholder: "例：半年內、先了解", required: true },
+    ];
+  }
+  if (intent === "tax") {
+    return [
+      { key: "legalTopic", label: "想問的稅務問題", placeholder: "例：房地合一稅、自住減免、繼承過戶", required: true },
+      { key: "purpose", label: "情況摘要", placeholder: "例：110 年買的自住滿兩年，想賣掉，想先算稅", required: true, multiline: true },
+      { key: "targetDate", label: "是否有期限", placeholder: "例：這個月要決定；目前沒有", required: true },
+    ];
+  }
+  if (intent === "reno") {
+    return [
+      { key: "propertyAddress", label: "房子大約位置", placeholder: "例：左營區，填到區即可", required: true },
+      { key: "purpose", label: "想做哪些項目", placeholder: "例：全室油漆、廚房翻新、換地板", required: true, multiline: true },
+      { key: "budget", label: "抓多少預算", placeholder: "例：30 萬以內、還不確定想先問", required: true },
     ];
   }
   return [
@@ -574,7 +591,7 @@ export default function BookingForm() {
     if (!bookingMode) next.bookingMode = "請先選擇這次預約的目的。";
     if (!intentKey) next.intent = "請選擇最接近的需求。";
     if (!meetType) next.meetType = "請選擇聯繫或見面的方式。";
-    if (meetType === "custom" && !customReady) next.meetType = "指定地點必須使用小明核准後提供的專屬連結。";
+    if (meetType === "custom" && !customReady) next.meetType = "指定地點必須使用邱姐核准後提供的專屬連結。";
     if (!selectedStart) next.slot = "請選擇可預約的日期與開始時間。";
     if (!duration) next.duration = "請選擇預約時長。";
     if (!name.trim()) next.name = "請填寫姓名。";
@@ -722,7 +739,7 @@ export default function BookingForm() {
       <main className={styles.page}>
         <div className={styles.shell}>
           <header className={styles.header}>
-            <div className={styles.brand}>房仲日常 MR.BIN</div>
+            <div className={styles.brand}>高雄三民邱姐 ‧ {OWNER.company}</div>
             <h1 className={styles.title}>預約進度</h1>
           </header>
           <section className={`${styles.statusPanel} ${pending ? styles.statusPanelWarning : ""} ${expired ? styles.statusPanelDanger : ""}`}>
@@ -769,7 +786,7 @@ export default function BookingForm() {
               ) : null}
               {done.manageUrl ? <a className={styles.actionLink} href={done.manageUrl}>管理預約</a> : null}
               <a className={styles.actionLink} href={SOCIAL.line} target="_blank" rel="noopener noreferrer">
-                聯絡小明
+                聯絡邱姐
               </a>
             </div>
           </section>
@@ -782,8 +799,8 @@ export default function BookingForm() {
     <main className={styles.page}>
       <div className={styles.shell}>
         <header className={styles.header}>
-          <div className={styles.brand}>房仲日常 MR.BIN</div>
-          <h1 className={styles.title}>預約與小明聊聊</h1>
+          <div className={styles.brand}>高雄三民邱姐 ‧ {OWNER.company}</div>
+          <h1 className={styles.title}>預約與邱姐聊聊</h1>
           <p className={styles.lead}>先告訴我這次要談什麼，系統只會顯示適合的方式、時長與必要問題。</p>
           <Progress current={currentStep} />
         </header>
@@ -863,8 +880,8 @@ export default function BookingForm() {
                       <span className={styles.optionDescription}>
                         {isCustom
                           ? customReady
-                            ? "地點已由小明核准，送出時不能自行更換"
-                            : "先與小明確認地點，取得專屬預約連結後才可選"
+                            ? "地點已由邱姐核准，送出時不能自行更換"
+                            : "先與邱姐確認地點，取得專屬預約連結後才可選"
                           : option.desc}
                       </span>
                     </button>
@@ -875,10 +892,10 @@ export default function BookingForm() {
 
               {approvalState === "checking" ? <div className={styles.inlineNotice}>正在驗證指定地點核准資料…</div> : null}
               {approvalState === "approved" && !approvedLocation ? (
-                <div className={styles.errorNotice}>核准連結缺少已同意的地點，無法開放指定地點。請聯絡小明重新產生連結。</div>
+                <div className={styles.errorNotice}>核准連結缺少已同意的地點，無法開放指定地點。請聯絡邱姐重新產生連結。</div>
               ) : null}
               {approvalState === "invalid" ? (
-                <div className={styles.errorNotice}>指定地點核准連結已失效、已使用或被撤銷，請重新聯絡小明。</div>
+                <div className={styles.errorNotice}>指定地點核准連結已失效、已使用或被撤銷，請重新聯絡邱姐。</div>
               ) : null}
               {approvalState === "unavailable" ? (
                 <div className={styles.warningNotice}>核准服務暫時無法驗證，請稍後重新整理；不用重新申請。</div>
@@ -886,13 +903,13 @@ export default function BookingForm() {
               {!customReady && approvalState !== "checking" ? (
                 <div className={styles.inlineNotice}>
                   需要指定其他地點？請先
-                  {" "}<a className={styles.link} href={SOCIAL.line} target="_blank" rel="noopener noreferrer">加小明私人 LINE</a>
+                  {" "}<a className={styles.link} href={SOCIAL.line} target="_blank" rel="noopener noreferrer">加邱姐私人 LINE</a>
                   {" "}確認。取得專屬連結後，系統會直接帶入核准地點。
                 </div>
               ) : null}
               {meetType === "custom" && approvedLocation ? (
                 <div className={styles.field}>
-                  <span className={styles.label}>小明已核准的指定地點</span>
+                  <span className={styles.label}>邱姐已核准的指定地點</span>
                   <div className={styles.locationValue}>
                     <span className={styles.locationName}>{approvedLocation.name}</span>
                     {approvedLocation.address ? <span className={styles.locationAddress}>{approvedLocation.address}</span> : null}
@@ -905,7 +922,7 @@ export default function BookingForm() {
                       </span>
                     ) : null}
                   </div>
-                  <p className={styles.sectionHint}>此地點已鎖定，若要更換請先與小明重新確認。</p>
+                  <p className={styles.sectionHint}>此地點已鎖定，若要更換請先與邱姐重新確認。</p>
                 </div>
               ) : null}
             </section>
@@ -929,7 +946,7 @@ export default function BookingForm() {
                 {!loadingSlots && !slotError && days.length === 0 ? (
                   <div className={styles.inlineNotice}>
                     目前沒有可預約時段。可改選其他聯繫方式，或
-                    {" "}<a className={styles.link} href={SOCIAL.line} target="_blank" rel="noopener noreferrer">直接聯絡小明</a>。
+                    {" "}<a className={styles.link} href={SOCIAL.line} target="_blank" rel="noopener noreferrer">直接聯絡邱姐</a>。
                   </div>
                 ) : null}
                 {days.length ? (

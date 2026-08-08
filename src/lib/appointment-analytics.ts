@@ -310,8 +310,8 @@ export async function runAppointmentAnalyticsTask(
     customData: {
       contentName:
         rawPayload.event === "submit_success"
-          ? "小明預約：完成留資表單"
-          : "小明預約：客戶已確認時段",
+          ? "邱姐預約：完成留資表單"
+          : "邱姐預約：客戶已確認時段",
       contentCategory: appointment.booking_mode || "appointment",
       contentIds: [appointment.id],
       contentType: "product",

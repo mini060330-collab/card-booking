@@ -4,6 +4,8 @@
  * ⏰ 時區:DB 存 UTC,台灣牆鐘用固定 +8 換算（台灣無日光節約,offset 永遠 +8）。
  */
 
+import { OWNER } from "@/config/owner";
+
 // ---- 可預約規則 ----
 // 2026-07-17：時段改「15 分鐘為單位選起始時間 + 選時長」（方案 A）。
 //   slotMinutes=15 同時是「併發防撞號 slot lock」的格粒度（見 appointment.ts occupiedSlotHours）—
@@ -29,12 +31,14 @@ export const LEGACY_DEFAULT_DURATION_MIN = 60;
 // ---- 意圖（含動態 placeholder:選哪類,備註提示就換哪句）----
 // interviewOnly 的（面試）只在 /card/booking?type=interview 專用連結顯示;預設客戶端不出現。2026-07-17
 export const INTENTS = [
-  { key: "buy", label: "買房", emoji: "🏠", placeholder: "例:想找北屯三房、預算 1,500 萬、自住自用" },
-  { key: "sell", label: "賣房", emoji: "🏷️", placeholder: "例:範例路透天想賣、換屋週轉、希望盡快出售" },
+  { key: "buy", label: "買房", emoji: "🏠", placeholder: "例:想找三民區三房、預算 1,200 萬、自住" },
+  { key: "sell", label: "賣房", emoji: "🏷️", placeholder: "例:苓雅區的房子想賣、換屋週轉、希望盡快出售" },
+  { key: "asset", label: "資產配置", emoji: "📊", placeholder: "例:手上兩間想重新配置、置產時機、資金怎麼安排" },
+  { key: "tax", label: "稅務諮詢", emoji: "🧾", placeholder: "例:房地合一稅怎麼算、自住減免、繼承過戶" },
+  { key: "reno", label: "簡易裝潢", emoji: "🔨", placeholder: "例:交屋後想輕裝潢、預算抓多少、想找師傅" },
   { key: "rent", label: "租賃", emoji: "🔑", placeholder: "例:想租 or 出租、想要的區域、預算、何時要" },
-  { key: "legal", label: "法律諮詢", emoji: "⚖️", placeholder: "例:繼承過戶、產權問題、買賣糾紛、貸款疑問" },
   { key: "interview", label: "面試", emoji: "🧑‍💼", placeholder: "例:應徵職位、方便聯絡的時間、想先了解的事", interviewOnly: true },
-  { key: "other", label: "其他", emoji: "💬", placeholder: "簡單描述你想找小明聊的事" },
+  { key: "other", label: "其他", emoji: "💬", placeholder: `簡單描述你想找${OWNER.alias}聊的事` },
 ] as const;
 
 export const URGENCIES = [
@@ -44,11 +48,8 @@ export const URGENCIES = [
 ] as const;
 
 export const MEET_TYPES = [
-  { key: "office", label: "公司面談", emoji: "🏢", desc: "OO 房屋・範例路 1 號" },
-  // 2026-07-17 新增：分公司（範例）
-  { key: "hq", label: "分公司", emoji: "🏛️", desc: "台中市西屯區台灣大道三段 660 號 4F-2（範例大樓）" },
-  { key: "studio", label: "OO 學院工作室", emoji: "🐻", desc: "台中市西屯區烈美街55巷12號" },
-  { key: "phone", label: "電話聯繫", emoji: "📞", desc: "小明主動來電" },
+  { key: "office", label: "門市面談", emoji: "🏢", desc: `${OWNER.company}・${OWNER.address}` },
+  { key: "phone", label: "電話聯繫", emoji: "📞", desc: `${OWNER.alias}主動來電` },
   { key: "video", label: "線上視訊", emoji: "💻", desc: "Google Meet / LINE 視訊" },
   // 2026-06-25 第 4 種:客戶自己指定見面地點（Google Places 自動完成 + 純文字備案）
   { key: "custom", label: "我指定地點", emoji: "📍", desc: "你來指定見面地點" },
@@ -155,8 +156,6 @@ export type AppointmentMeetingPolicy = {
 
 export const APPOINTMENT_MEETING_POLICIES: Record<MeetTypeKey, AppointmentMeetingPolicy> = {
   office: { leadHours: 12, bufferBeforeMin: 15, bufferAfterMin: 15, publicDurations: [60] },
-  hq: { leadHours: 12, bufferBeforeMin: 15, bufferAfterMin: 15, publicDurations: [60] },
-  studio: { leadHours: 12, bufferBeforeMin: 15, bufferAfterMin: 15, publicDurations: [60] },
   phone: { leadHours: 2, bufferBeforeMin: 10, bufferAfterMin: 10, publicDurations: [30, 60] },
   video: { leadHours: 2, bufferBeforeMin: 10, bufferAfterMin: 10, publicDurations: [30, 60] },
   custom: { leadHours: 24, bufferBeforeMin: 45, bufferAfterMin: 45, publicDurations: [60] },
