@@ -43,5 +43,5 @@ export const SOCIAL = {
 /** LINE 加好友 QR 圖（放 public/card/ 底下）。null = 不顯示 QR 區 */
 export const LINE_QR: string | null = null;
 
-/** 網站網址（通知信裡的連結、Open Graph 用） */
-export const SITE_URL = process.env.APPOINTMENT_BASE_URL || "http://localhost:3000";
+/** 網站網址（通知信裡的連結、Open Graph 用）—— 解析規則見 src/lib/base-url.ts */
+export { BASE_URL as SITE_URL } from "@/lib/base-url";

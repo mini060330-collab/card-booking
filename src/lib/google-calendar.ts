@@ -17,6 +17,7 @@ import {
   normalizeCalendarTitleTemplate,
 } from "@/lib/appointment-calendar-display";
 import { collectCalendarEventIds } from "@/lib/google-calendar-pagination";
+import { BASE_URL } from "@/lib/base-url";
 
 const TOKEN_URL = "https://oauth2.googleapis.com/token";
 const AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
@@ -24,7 +25,6 @@ const CAL_API = "https://www.googleapis.com/calendar/v3";
 
 const CLIENT_ID = process.env.GOOGLE_CALENDAR_CLIENT_ID || process.env.AUTH_GOOGLE_ID || "";
 const CLIENT_SECRET = process.env.GOOGLE_CALENDAR_CLIENT_SECRET || process.env.AUTH_GOOGLE_SECRET || "";
-const BASE_URL = process.env.APPOINTMENT_BASE_URL || "https://example.com";
 export const GOOGLE_REDIRECT_URI = `${BASE_URL}/api/appointment/google/callback`;
 const SCOPE = "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.readonly";
 

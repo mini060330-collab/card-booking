@@ -50,10 +50,11 @@ import {
   normalizeMetaBrowserId,
 } from "@/lib/tracking-consent";
 
+import { BASE_URL } from "@/lib/base-url";
+
 export const dynamic = "force-dynamic";
 
 // 2026-08-06 移除：重複防呆的視窗改由後台設定（getAppointmentRateLimitSettings().duplicateWindowMin）
-const BASE_URL = (process.env.APPOINTMENT_BASE_URL || "https://example.com").replace(/\/+$/, "");
 
 function clean(value: unknown, max: number): string | null {
   const normalized = String(value || "").trim().slice(0, max);

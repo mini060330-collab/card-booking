@@ -19,9 +19,10 @@ import type { AppointmentNotificationPurpose, MeetLocation } from "@/lib/appoint
 import { createAppointmentManageToken } from "@/lib/appointment-token";
 import { db } from "@/lib/db";
 import { OWNER, SOCIAL } from "@/config/owner";
+import { BASE_URL } from "@/lib/base-url";
 
 const BINGE_EMAIL = process.env.APPOINTMENT_ADMIN_EMAIL || "your-email@example.com";
-const APPOINTMENT_BASE_URL = process.env.APPOINTMENT_BASE_URL || "https://example.com";
+const APPOINTMENT_BASE_URL = BASE_URL;
 const GENDER_HONOR: Record<string, string> = { male: "先生", female: "小姐" };
 const ABIN_PRIVATE_LINE_URL = SOCIAL.line;
 // 門市地址一律讀 src/config/owner.ts，不在這裡寫死
