@@ -9,6 +9,7 @@
 import { sendMail } from "@/lib/mail";
 import { notifyAbinAdminGroup } from "@/lib/line-notify";
 import {
+  BOOKING_CONFIRMATION_HOLD_MINUTES,
   ensureAppointmentTable,
   intentLabel,
   urgencyLabel,
@@ -266,8 +267,8 @@ function realtorEmailLayout(opts: { title: string; preheader?: string; bodyHtml:
   <tr><td style="background:#F7FAFB;padding:20px 32px;border-top:1px solid #E3EAEE">
     <div style="font-size:13px;color:#7A8896;line-height:1.8">
       ${esc(OWNER.name)}（${esc(OWNER.alias)}）‧ ${esc(OWNER.company)}<br>
-      📞 0900-000-000　📍 台北市中正區範例路 1 號<br>
-      LINE：0900-000-000
+      📞 ${esc(OWNER.phone)}　📍 ${esc(OWNER.address)}<br>
+      LINE：${esc(OWNER.phone)}
     </div>
   </td></tr>
 </table>
@@ -288,12 +289,12 @@ function transactionalEmailLayout(opts: { title: string; preheader?: string; bod
 <table role="presentation" class="container" width="560" cellpadding="0" cellspacing="0" style="width:560px;max-width:560px;background:#FFFFFF;border:1px solid #E3EAEE;border-radius:12px;overflow:hidden">
   <tr><td style="height:4px;background:#4EC4DC;font-size:0;line-height:0">&nbsp;</td></tr>
   <tr><td class="px" style="padding:22px 30px 4px">
-    <div style="font-size:13px;color:#7A8896">房仲日常 · OwnerName</div>
+    <div style="font-size:13px;color:#7A8896">${esc(OWNER.name)} · ${esc(OWNER.company)}</div>
     <div style="font-size:20px;font-weight:700;color:#1C2D3A;margin-top:4px">${esc(opts.title)}</div>
   </td></tr>
   <tr><td class="px" style="padding:8px 30px 26px">${opts.bodyHtml}</td></tr>
   <tr><td style="padding:16px 30px;border-top:1px solid #EDF2F4">
-    <div style="font-size:13px;color:#7A8896;line-height:1.7">王小明 邱姐 · OO 房屋　LINE / 電話 0900-000-000</div>
+    <div style="font-size:13px;color:#7A8896;line-height:1.7">${esc(OWNER.name)}（${esc(OWNER.alias)}）· ${esc(OWNER.company)}　LINE / 電話 ${esc(OWNER.phone)}</div>
   </td></tr>
 </table>
 </td></tr></table></body></html>`;
@@ -389,7 +390,7 @@ export async function sendCustomerAppointmentConfirmation(a: NotifyInput): Promi
     appointmentId: a.id,
     purpose: "customer_confirmation",
     to: a.email,
-    subject: `你的預約已確認 · 邱姐（王小明）`,
+    subject: `你的預約已確認 · ${OWNER.alias}（${OWNER.name}）`,
     html: transactionalEmailLayout({
       title: "預約已確認",
       preheader: `${esc(a.name)} ${honor}你好,邱姐已收到你的預約 · ${slotTw}`,
@@ -439,7 +440,7 @@ export async function sendCustomerAppointmentConfirmationRequest(a: NotifyInput)
     appointmentId: a.id,
     purpose: "customer_confirmation_request",
     to: a.email,
-    subject: "請在 15 分鐘內確認預約 · 邱姐（王小明）",
+    subject: `請在 ${BOOKING_CONFIRMATION_HOLD_MINUTES} 分鐘內確認預約 · ${OWNER.alias}（${OWNER.name}）`,
     html: transactionalEmailLayout({
       title: "時段已暫時保留",
       preheader: `請在 ${deadlineTw} 前確認 · ${slotTw}`,
@@ -486,7 +487,7 @@ export async function sendCustomerAppointmentChangeEmail(
     appointmentId: a.id,
     purpose: isCancel ? "customer_cancel" : "customer_reschedule",
     to: a.email,
-    subject: isCancel ? `預約已取消 · 邱姐（王小明）` : `預約已改期 · 邱姐（王小明）`,
+    subject: `${isCancel ? "預約已取消" : "預約已改期"} · ${OWNER.alias}（${OWNER.name}）`,
     html: transactionalEmailLayout({
       title,
       preheader: isCancel ? `你的預約已取消 · ${slotTw}` : `你的預約已改期 · ${slotTw}`,
@@ -524,7 +525,7 @@ export async function sendCustomerAppointmentReminder(a: NotifyInput): Promise<b
     appointmentId: a.id,
     purpose: "customer_reminder",
     to: a.email,
-    subject: `明天預約提醒 · 邱姐（王小明）`,
+    subject: `明天預約提醒 · ${OWNER.alias}（${OWNER.name}）`,
     html: transactionalEmailLayout({
       title: "明天預約提醒",
       preheader: `你的預約時間:${slotTw}`,
