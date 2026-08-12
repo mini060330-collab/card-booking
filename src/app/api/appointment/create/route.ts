@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import {
   AppointmentIdempotencyConflictError,
   AppointmentLocationApprovalError,
@@ -43,6 +43,7 @@ import {
   isGoogleConfigured,
 } from "@/lib/google-calendar";
 import { getClientIp } from "@/lib/rate-limit";
+import { runAppointmentOutbox } from "@/lib/appointment-outbox-worker";
 import { enqueueAppointmentAnalyticsEvent } from "@/lib/appointment-analytics";
 import { getCurrentTrackingConsent } from "@/lib/tracking-consent-server";
 import {
@@ -116,6 +117,21 @@ function publicResponse(appt: AppointmentRow) {
   };
 }
 
+/**
+ * 排完隊之後，用 after() 在「回應已經送給客戶」之後把佇列跑掉。
+ * 放在 after 裡面是刻意的：進 Google 日曆和寄信可能要好幾秒，
+ * 不該讓客戶按完送出卡在那邊等。
+ */
+function drainOutboxAfterResponse(): void {
+  after(async () => {
+    try {
+      await runAppointmentOutbox(10);
+    } catch (error) {
+      console.error("[appointment/create] 跑待辦佇列失敗:", error);
+    }
+  });
+}
+
 async function enqueueCreatedAppointmentTasks(appt: AppointmentRow): Promise<void> {
   if (appt.status === "pending_confirmation") {
     await Promise.all([
@@ -131,6 +147,7 @@ async function enqueueCreatedAppointmentTasks(appt: AppointmentRow): Promise<voi
         dedupeKey: `appointment:${appt.id}:ai-grade`,
       }),
     ]);
+    drainOutboxAfterResponse();
     return;
   }
   if (appt.status === "confirmed") {
@@ -156,6 +173,7 @@ async function enqueueCreatedAppointmentTasks(appt: AppointmentRow): Promise<voi
         payload: { phase: "confirmed" },
       }),
     ]);
+    drainOutboxAfterResponse();
   }
 }
 

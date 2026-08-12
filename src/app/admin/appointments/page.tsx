@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import { isCurrentUserAdmin } from "@/lib/admin-check";
+import { runAppointmentOutbox } from "@/lib/appointment-outbox-worker";
 import {
   intentEmoji,
   intentLabel,
@@ -302,6 +304,16 @@ export default async function AppointmentsAdminPage({
 }) {
   // 未登入導去登入頁（原本是 throw，會變成看不懂的 500 錯誤頁）
   if (!(await isCurrentUserAdmin())) redirect("/admin/login");
+
+  // 保險：開後台就把還沒跑掉的待辦（進日曆、發通知）補跑一次。
+  // 建預約當下已經跑過一輪，這裡是為了接住那次剛好失敗、或先前累積下來的。
+  after(async () => {
+    try {
+      await runAppointmentOutbox(20);
+    } catch (error) {
+      console.error("[admin/appointments] 補跑待辦佇列失敗:", error);
+    }
+  });
 
   const sp = await searchParams;
   const queue = QUEUES.some((item) => item.key === sp.queue) ? (sp.queue as AppointmentQueue) : "all";

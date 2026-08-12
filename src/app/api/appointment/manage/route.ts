@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
+import { runAppointmentOutbox } from "@/lib/appointment-outbox-worker";
 import {
   AppointmentSlotConflictError,
   LEGACY_DEFAULT_DURATION_MIN,
@@ -177,6 +178,20 @@ async function enforceRateLimit(req: NextRequest, operation: "get" | "post"): Pr
   }
 }
 
+/**
+ * 排完隊後把佇列跑掉。放在 after() 裡＝回應先送出去，客戶不用等 Google 和寄信。
+ * 改期／取消／確認三條路徑都要呼叫，否則工作只會排隊不會執行。
+ */
+function drainOutboxAfterResponse(): void {
+  after(async () => {
+    try {
+      await runAppointmentOutbox(10);
+    } catch (error) {
+      console.error("[appointment/manage] 跑待辦佇列失敗:", error);
+    }
+  });
+}
+
 async function enqueueConfirmationTasks(appt: Appointment): Promise<void> {
   await Promise.all([
     ...(isGoogleConfigured()
@@ -195,6 +210,7 @@ async function enqueueConfirmationTasks(appt: Appointment): Promise<void> {
       payload: { phase: "confirmed" },
     }),
   ]);
+  drainOutboxAfterResponse();
 }
 
 export async function GET(req: NextRequest) {
@@ -332,6 +348,7 @@ export async function POST(req: NextRequest) {
           payload: { notifyCustomer: true, notifyAdmin: true },
         }),
       ]);
+      drainOutboxAfterResponse();
     } catch (error) {
       console.error("[appointment/manage] cancel enqueue failed:", error);
       return NextResponse.json(
@@ -426,6 +443,7 @@ export async function POST(req: NextRequest) {
             },
           }),
         ]);
+        drainOutboxAfterResponse();
       } catch (error) {
         console.error("[appointment/manage] reschedule enqueue failed:", error);
         return NextResponse.json(
