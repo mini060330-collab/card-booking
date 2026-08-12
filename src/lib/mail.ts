@@ -35,20 +35,28 @@ export type SendMailResult = {
 };
 
 const FROM_EMAIL = process.env.MAIL_FROM_EMAIL || "onboarding@resend.dev";
-const FROM_NAME = process.env.MAIL_FROM_NAME || "線上預約";
+const FROM_NAME = process.env.MAIL_FROM_NAME || "邱靜慧｜台慶不動產";
 
 export async function sendMail(input: SendMailInput): Promise<SendMailResult> {
   const apiKey = (process.env.RESEND_API_KEY || "").trim();
   const to = Array.isArray(input.to) ? input.to : [input.to];
 
   if (!apiKey) {
-    // 本機開發模式：不真的寄，把內容印出來
-    console.log("─".repeat(60));
-    console.log("[mail] 沒設 RESEND_API_KEY，這封信沒有真的寄出去");
-    console.log("  收件:", to.join(", "));
-    console.log("  主旨:", input.subject);
-    console.log("─".repeat(60));
-    return { success: true, provider: "mock" };
+    // 本機開發：不真的寄，把內容印出來就好
+    if (process.env.NODE_ENV !== "production") {
+      console.log("─".repeat(60));
+      console.log("[mail] 沒設 RESEND_API_KEY，這封信沒有真的寄出去");
+      console.log("  收件:", to.join(", "));
+      console.log("  主旨:", input.subject);
+      console.log("─".repeat(60));
+      return { success: true, provider: "mock" };
+    }
+    // 🔴 正式站沒設金鑰時，**絕不能回報成功**。
+    //    以前這裡不分環境一律回 success:true，結果線上的後台顯示「通知已完成」，
+    //    但其實一封都沒寄出去 —— 系統擁有者以為客戶收到了確認信，實際上沒有。
+    //    寧可讓後台亮紅字，也不要假裝有寄。
+    console.error("[mail] 正式站沒有設定 RESEND_API_KEY，這封信沒有寄出:", input.subject);
+    return { success: false, provider: "mock", error: "resend_api_key_missing" };
   }
 
   try {
