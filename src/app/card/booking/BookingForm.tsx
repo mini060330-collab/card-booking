@@ -523,9 +523,19 @@ export default function BookingForm() {
       .find((slot) => slot.iso === selectedStart) || null,
     [days, selectedStart],
   );
-  const availableDurations = selectedSlot
-    ? allowedDurations.filter((value) => value <= selectedSlot.maxDurationMin)
-    : [];
+  const availableDurations = useMemo(
+    () => (selectedSlot ? allowedDurations.filter((value) => value <= selectedSlot.maxDurationMin) : []),
+    [allowedDurations, selectedSlot],
+  );
+  // 選好時間後自動帶入第一個可選時長，客戶還是可以自己改。
+  // 不這樣做的話，「電話聯繫／線上視訊」有兩種時長，沒點時長就看不到後面的姓名電話欄位，
+  // 客戶會以為表單壞掉。
+  useEffect(() => {
+    if (!selectedSlot || !availableDurations.length) return;
+    if (duration && availableDurations.includes(duration)) return;
+    setDuration(availableDurations[0]);
+  }, [availableDurations, duration, selectedSlot]);
+
   const requiredQualificationFields = bookingMode && intentKey
     ? qualificationFields(bookingMode, intentKey)
     : [];
@@ -992,6 +1002,9 @@ export default function BookingForm() {
               {selectedSlot ? (
                 <div className={styles.field} ref={registerRef("duration")} tabIndex={-1}>
                   <span className={styles.label}>預約時長</span>
+                  {availableDurations.length > 1 ? (
+                    <p className={styles.sectionHint}>已預設 {durationLabel(availableDurations[0])}，需要更久可以直接改。</p>
+                  ) : null}
                   {availableDurations.length ? (
                     <div className={styles.durationRow}>
                       {availableDurations.map((value) => (

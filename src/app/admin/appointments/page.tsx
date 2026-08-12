@@ -379,6 +379,24 @@ export default async function AppointmentsAdminPage({
               : googleConfigured
                 ? "Google 日曆尚未綁定"
                 : "Google 日曆尚未設定"}
+            {/* 設定好 OAuth 但還沒授權時，要有地方可以按去綁定 */}
+            {googleConfigured ? (
+              <a
+                href="/api/appointment/google/auth"
+                style={{
+                  marginLeft: 12,
+                  fontSize: 13.5,
+                  fontWeight: 800,
+                  color: CIS.bg,
+                  textDecoration: "none",
+                  background: googleBound ? CIS.textMute : "#F3C640",
+                  borderRadius: 8,
+                  padding: "6px 12px",
+                }}
+              >
+                {googleBound ? "重新綁定" : "綁定 Google 日曆"}
+              </a>
+            ) : null}
             <a
               href="/admin/logout"
               style={{
