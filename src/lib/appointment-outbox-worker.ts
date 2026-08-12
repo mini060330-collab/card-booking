@@ -178,6 +178,28 @@ async function buildCalendarEvent(appt: AppointmentRow): Promise<{
   };
 }
 
+/**
+ * 判斷一則通知算不算送成功。
+ *
+ * 🔴 不能直接看 result.ok：ok 要求「email 成功 **而且** LINE 成功」，
+ *    但 LINE 群組通知根本還沒設定（沒有 token / group id），永遠回失敗。
+ *    照 ok 判斷的話，每一筆預約的通知都會無止盡重試到第 8 次才放棄，
+ *    後台就永遠掛著「等待重試」。
+ *    LINE 沒接上是「還沒開通這個管道」，不是「這次送失敗」——只有 email 真的失敗才值得重試。
+ */
+function assertNotifyDelivered(
+  result: { adminEmail?: string; customerEmail?: string; adminLine?: string },
+  taskType: string,
+): void {
+  const failed: string[] = [];
+  if (result.adminEmail === "failed") failed.push("adminEmail");
+  if (result.customerEmail === "failed") failed.push("customerEmail");
+  if (failed.length) throw new Error(`${taskType}_failed:${failed.join(",")}`);
+  if (result.adminLine === "failed") {
+    console.log(`[outbox] ${taskType}：LINE 群組通知未送出（尚未設定 LINE），email 已處理，不重試`);
+  }
+}
+
 async function runOne(task: AppointmentOutboxRow): Promise<void> {
   const appt = await getAppointment(task.appointment_id);
   if (!appt) {
@@ -228,7 +250,7 @@ async function runOne(task: AppointmentOutboxRow): Promise<void> {
     case "notify_new": {
       const phase = payload.phase === "confirmation_request" ? "confirmation_request" : "confirmed";
       const result = await notifyNewAppointment(toNotifyInput(appt), { phase, onlyPending: true });
-      if (!result.ok) throw new Error("notify_new_failed");
+      assertNotifyDelivered(result, task.task_type);
       return;
     }
 
@@ -244,7 +266,7 @@ async function runOne(task: AppointmentOutboxRow): Promise<void> {
         { type, previousSlotTw },
         { notifyAdmin: true, onlyPending: true },
       );
-      if (!result.ok) throw new Error(`${task.task_type}_failed`);
+      assertNotifyDelivered(result, task.task_type);
       return;
     }
 
