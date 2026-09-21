@@ -78,7 +78,7 @@ export default function HomePage() {
           </div>
           <div className="topnav-cta">
             <a className="btn-tel-outline" href={`tel:${OWNER.phoneRaw}`}>電話</a>
-            <a className="btn-line" href={SOCIAL.line} target="_blank" rel="noreferrer">加LINE</a>
+            <a className="btn-line" href={SOCIAL.lineOA} target="_blank" rel="noreferrer">加LINE</a>
           </div>
         </div>
       </nav>
@@ -96,7 +96,7 @@ export default function HomePage() {
             <p className="tagline">113、114年連續百萬菁英戰將。專精資產配置、稅務規劃與簡易裝潢，替你把關每一個關鍵決定。</p>
             <div className="hero-cta">
               <Link className="btn btn-tel-lg" href="/card/booking">線上預約諮詢</Link>
-              <a className="btn btn-line-lg" href={SOCIAL.line} target="_blank" rel="noreferrer">加LINE諮詢</a>
+              <a className="btn btn-line-lg" href={SOCIAL.lineOA} target="_blank" rel="noreferrer">加LINE諮詢</a>
             </div>
           </div>
         </div>
@@ -191,7 +191,7 @@ export default function HomePage() {
             <div className="booking-side">
               <h3>更快的方式</h3>
               <p>比起填表，直接加LINE或打電話，通常能更快得到回覆。</p>
-              <a className="btn btn-line-lg" href={SOCIAL.line} target="_blank" rel="noreferrer">加LINE諮詢</a>
+              <a className="btn btn-line-lg" href={SOCIAL.lineOA} target="_blank" rel="noreferrer">加LINE諮詢</a>
               <a className="btn btn-tel-lg" href={`tel:${OWNER.phoneRaw}`}>電話 {OWNER.phone}</a>
               <div className="contact-line">門市：{OWNER.address}</div>
             </div>
@@ -207,7 +207,7 @@ export default function HomePage() {
         </div>
       </footer>
 
-      <a className="float-line" href={SOCIAL.line} target="_blank" rel="noreferrer">加LINE</a>
+      <a className="float-line" href={SOCIAL.lineOA} target="_blank" rel="noreferrer">加LINE</a>
     </div>
   );
 }

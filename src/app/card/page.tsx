@@ -130,7 +130,7 @@ export default function CardPage() {
               <CalendarIcon size={20} color={RCIS.ink} />
               線上預約諮詢
             </Link>
-            <a href={SOCIAL.line} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 9, background: "#06C755", color: RCIS.ink, fontSize: 16, fontWeight: 800, padding: "14px", borderRadius: 13, textDecoration: "none" }}>
+            <a href={SOCIAL.lineOA} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 9, background: "#06C755", color: RCIS.ink, fontSize: 16, fontWeight: 800, padding: "14px", borderRadius: 13, textDecoration: "none" }}>
               <LineIcon size={22} />
               加邱姐 LINE
             </a>

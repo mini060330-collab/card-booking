@@ -34,7 +34,10 @@ export const OWNER = {
 
 /** 社群連結 —— 用不到的留空字串，畫面會自動不顯示 */
 export const SOCIAL = {
+  /** 私人 LINE：已預約的客人「聯絡邱姐」用 */
   line: `https://line.me/R/ti/p/~${OWNER.phoneRaw}`,
+  /** LINE 官方帳號：官網、名片頁的「加 LINE」用（新客人導這裡，才收得到群發與物件卡） */
+  lineOA: "https://line.me/R/ti/p/@530myzmv",
   fb: "",
   yt: "",
   ig: "",
