@@ -134,6 +134,9 @@ export default function CardPage() {
               <LineIcon size={22} />
               加邱姐 LINE
             </a>
+            <a href="/tools" style={{ display: "flex", alignItems: "center", justifyContent: "center", background: RCIS.bgSoft, border: `1px solid ${RCIS.border}`, color: RCIS.ink, fontSize: 16, fontWeight: 700, padding: "13px", borderRadius: 13, textDecoration: "none" }}>
+              買房試算：貸款／青安／雜費
+            </a>
           </div>
 
           {/* 聯絡 */}

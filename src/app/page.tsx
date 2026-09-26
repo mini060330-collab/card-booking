@@ -48,6 +48,13 @@ const SERVICES = [
   { num: "03", name: "簡易裝潢", text: "交屋後的輕裝潢、局部翻新，信任的師傅、精準的預算控管，我幫你把關到底。" },
 ];
 
+// 靜態頁放在 public/tools/，網址對應見 next.config.ts
+const TOOLS = [
+  { href: "/tools/qingan", name: "青安 3.0 資格檢測", text: "7 題測你符不符合、最多能貸多少、每月繳多少。9/18 起第 2 戶可貸 7 成也一起算。" },
+  { href: "/tools/afford", name: "我買得起多少", text: "輸入月收入和手上現金，算出你在高雄買得起多少錢的房子。" },
+  { href: "/tools/fees", name: "買房雜費一次算", text: "頭期款之外，契稅、代書、仲介費、搬家，還要準備多少現金。" },
+];
+
 const JSON_LD = {
   "@context": "https://schema.org",
   "@type": "RealEstateAgent",
@@ -74,6 +81,7 @@ export default function HomePage() {
             <a href="#area">服務區域</a>
             <a href="#record">戰績</a>
             <a href="#services">服務項目</a>
+            <a href="#tools">買房試算</a>
             <a href="#booking">預約諮詢</a>
           </div>
           <div className="topnav-cta">
@@ -161,6 +169,28 @@ export default function HomePage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section id="tools">
+        <div className="container">
+          <div className="section-head">
+            <div className="eyebrow">Tools</div>
+            <h2>買房前，先算一算</h2>
+            <p>免費使用，不用留資料。先把數字算清楚，看房才不會白跑。</p>
+          </div>
+          <div className="service-grid">
+            {TOOLS.map((t, i) => (
+              <a className="service-card" key={t.href} href={t.href} style={{ textDecoration: "none", color: "inherit" }}>
+                <div className="num">{String(i + 1).padStart(2, "0")}</div>
+                <h3>{t.name}</h3>
+                <p>{t.text}</p>
+              </a>
+            ))}
+          </div>
+          <p style={{ textAlign: "center", marginTop: 20 }}>
+            <a href="/tools" style={{ textDecoration: "underline" }}>看全部買房試算工具 →</a>
+          </p>
         </div>
       </section>
 

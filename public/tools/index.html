@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>買房試算工具｜高雄房仲邱姐</title>
+<meta name="description" content="青安 3.0 資格檢測、第 2 戶房貸 7 成、買得起多少、買房雜費——高雄房仲邱姐的免費買房試算工具，不用留資料。">
+<meta property="og:title" content="買房前先算一算｜高雄房仲邱姐">
+<meta property="og:description" content="青安 3.0 資格、第 2 戶房貸 7 成、買得起多少、買房雜費，30 秒算給你看。">
+<meta property="og:image" content="https://card-booking-zeta.vercel.app/site/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700&display=swap">
+<style>
+  :root {
+    --bg:#F5F3F0; --surface:#FFFFFF; --line:#E4DED6; --soft:#F3EEE8;
+    --ink:#1E2430; --ink-mid:#4B5563; --ink-soft:#7A8290;
+    --accent:#B0463A; --accent-dark:#7E2E25; --accent-ink:#FFFFFF; --num:#C98A2E;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#2A2E37;
+      --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+      --accent:#E07A6C; --accent-dark:#5A2019; --accent-ink:#1A0F0D; --num:#E0AE6A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#2A2E37;
+    --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+    --accent:#E07A6C; --accent-dark:#5A2019; --accent-ink:#1A0F0D; --num:#E0AE6A;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif; line-height:1.6; }
+  .wrap { max-width:72rem; margin:0 auto; padding:1.5rem 16px 3rem; }
+  header { display:flex; align-items:center; gap:.8rem; }
+  .logo { width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+    display:grid; place-items:center; font-weight:700; font-size:1.2rem; flex:none; text-decoration:none; }
+  header a.name { font-weight:700; font-size:1.05rem; color:var(--ink); text-decoration:none; }
+  header .sub { font-size:.8rem; color:var(--ink-soft); }
+  h1 { font-size:1.6rem; margin:1.4rem 0 .2rem; }
+  .lede { color:var(--ink-mid); margin:0 0 1.4rem; font-size:.95rem; }
+
+  .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:1rem; }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+    display:flex; flex-direction:column; box-shadow:0 4px 18px rgba(0,0,0,.05); }
+  .top { padding:1.3rem 1.2rem 1rem; color:#fff; background:linear-gradient(135deg,#2A2F3A,#12151B); }
+  .top.red { background:linear-gradient(135deg,var(--accent-dark),#B0463A); }
+  .top h2 { font-family:"Noto Serif TC",serif; font-size:1.65rem; margin:0; letter-spacing:.04em; line-height:1.3; }
+  .top p { margin:.2rem 0 0; font-size:.8rem; opacity:.85; letter-spacing:.08em; }
+  .body { padding:1.1rem 1.2rem .6rem; flex:1; }
+  .body h3 { font-size:1.08rem; margin:0 0 .6rem; line-height:1.45; }
+  .body ol { list-style:none; margin:0; padding:0; counter-reset:n; }
+  .body li { counter-increment:n; position:relative; padding-left:1.8rem; margin-bottom:.5rem; font-size:.95rem; color:var(--ink-mid); }
+  .body li::before { content:counter(n); position:absolute; left:0; top:.15rem; width:1.25rem; height:1.25rem;
+    border:1.5px solid var(--num); color:var(--num); border-radius:50%; font-size:.72rem; display:grid; place-items:center; font-weight:700; }
+  .btns { padding:0 1.2rem 1.2rem; display:flex; flex-direction:column; gap:.5rem; }
+  .btn { display:block; text-align:center; text-decoration:none; font-size:1rem; padding:.78rem; border-radius:10px; }
+  .btn.main { background:var(--accent); color:var(--accent-ink); font-weight:700; }
+  .btn.sub { background:var(--soft); color:var(--ink); border:1px solid var(--line); }
+  .btn.line { background:#06C755; color:#fff; font-weight:700; }
+  .btn.tel { background:var(--ink); color:var(--bg); font-weight:700; }
+  footer { text-align:center; font-size:.76rem; color:var(--ink-soft); margin-top:2rem; }
+  footer a { color:inherit; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="logo" href="/">邱</a>
+    <div>
+      <a class="name" href="/">高雄房仲邱姐｜邱靜慧</a>
+      <div class="sub">第一次買房，可以先問邱姐</div>
+    </div>
+  </header>
+
+  <h1>買房前，先算一算</h1>
+  <p class="lede">免費使用，不用留姓名電話。算完有疑問，再來問我。</p>
+
+  <div class="cards">
+    <article class="card">
+      <div class="top"><h2>第 2 戶房貸 7 成</h2><p>9/18 起・全國適用</p></div>
+      <div class="body">
+        <h3>央行鬆綁，第 2 戶最高貸到 7 成</h3>
+        <ol>
+          <li>第 2 戶購屋貸款上限從 6 成放寬到 7 成</li>
+          <li>第 3 戶以上還是 3 成，沒有寬限期</li>
+          <li>首購看青安 3.0：未滿 50 歲，最高貸 1,000 萬起</li>
+        </ol>
+      </div>
+      <div class="btns">
+        <a class="btn main" href="/tools/qingan">我符合青安 3.0 嗎？</a>
+        <a class="btn sub" href="/tools/qingan#calc">算我每月要繳多少</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top red"><h2>買得起多少？</h2><p>先算，再看房</p></div>
+      <div class="body">
+        <h3>看房前，先算清楚兩個數字</h3>
+        <ol>
+          <li>很多人看到喜歡的才算，算完差一截，白跑好幾趟</li>
+          <li>以你的收入，銀行大概肯借多少</li>
+          <li>頭期款之外，契稅、代書、仲介費還要準備多少</li>
+        </ol>
+      </div>
+      <div class="btns">
+        <a class="btn main" href="/tools/afford">算我買得起多少</a>
+        <a class="btn sub" href="/tools/fees">買房雜費一次算</a>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="top"><h2>直接問邱姐</h2><p>高雄三民・左營・鳳山・苓雅</p></div>
+      <div class="body">
+        <h3>算完還是拿不定主意？</h3>
+        <ol>
+          <li>哪家銀行條件好、成數怎麼談</li>
+          <li>你看上的那間，總價會不會被鑑價卡住</li>
+          <li>換屋要先賣還是先買，時間怎麼排</li>
+        </ol>
+      </div>
+      <div class="btns">
+        <a class="btn line" href="https://line.me/R/ti/p/@530myzmv" target="_blank" rel="noopener">加 LINE 問邱姐</a>
+        <a class="btn tel" href="/card/booking">線上預約時間</a>
+      </div>
+    </article>
+  </div>
+
+  <footer>
+    試算僅供參考，實際額度、利率與成數以銀行核貸結果為準。<br>
+    <a href="/">回邱姐官網</a>　© 2026 高雄房仲邱姐／邱靜慧
+  </footer>
+</div>
+</body>
+</html>

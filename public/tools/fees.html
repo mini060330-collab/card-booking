@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>買房雜費試算｜高雄房仲邱姐</title>
+<meta name="description" content="輸入房屋總價，一次列出頭期款以外還要準備的契稅、代書、仲介費、火險、搬家等雜費。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bg:#F5F3F0; --surface:#FFFFFF; --line:#E4DED6; --soft:#F3EEE8;
+    --ink:#1E2430; --ink-mid:#4B5563; --ink-soft:#7A8290;
+    --accent:#B0463A; --accent-ink:#FFFFFF; --accent-bg:#F8E9E6;
+    --warn:#9A5B12; --warn-bg:#FBF1E2; --line-green:#06C755; --radius:12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#23272F;
+      --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+      --accent:#E07A6C; --accent-ink:#1A0F0D; --accent-bg:#34211E;
+      --warn:#E0AE6A; --warn-bg:#2E2517;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#23272F;
+    --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+    --accent:#E07A6C; --accent-ink:#1A0F0D; --accent-bg:#34211E;
+    --warn:#E0AE6A; --warn-bg:#2E2517;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:40rem; margin:0 auto; padding:1.25rem 16px 3rem; }
+  header { display:flex; align-items:center; gap:.8rem; margin-bottom:1.25rem; }
+  .logo { width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+    display:grid; place-items:center; font-weight:700; font-size:1.2rem; flex:none; }
+  header .name { font-weight:700; font-size:1.05rem; }
+  header .sub { font-size:.8rem; color:var(--ink-soft); }
+  h1 { font-size:1.5rem; margin:0 0 .2rem; }
+  .lede { color:var(--ink-mid); margin:0 0 1.25rem; font-size:.92rem; }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:1.2rem; margin-bottom:1rem; }
+  label.t { display:block; font-size:.85rem; font-weight:500; margin-bottom:.3rem; }
+  .inp { display:flex; align-items:center; border:1px solid var(--line); border-radius:8px; }
+  .inp:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-bg); }
+  .inp input { flex:1; min-width:0; border:0; background:transparent; color:var(--ink); font:inherit; font-size:1.05rem; padding:.6rem .75rem; outline:none; }
+  .inp span { padding-right:.75rem; color:var(--ink-soft); font-size:.9rem; }
+  .group { margin-top:1rem; }
+  .seg { display:flex; background:var(--soft); border-radius:8px; padding:3px; gap:3px; }
+  .seg button { flex:1; border:0; background:transparent; color:var(--ink-mid); font:inherit; font-size:.88rem;
+    padding:.55rem .3rem; border-radius:6px; cursor:pointer; }
+  .seg button.on { background:var(--accent); color:var(--accent-ink); font-weight:700; }
+  .result { border:2px solid var(--accent); }
+  .big { background:var(--accent); color:var(--accent-ink); border-radius:10px; padding:1rem 1.1rem; }
+  .big .k { font-size:.85rem; opacity:.9; }
+  .big .v { font-size:2.2rem; font-weight:700; line-height:1.2; margin:.15rem 0; font-variant-numeric:tabular-nums; }
+  .big .s { font-size:.82rem; opacity:.9; }
+  .verdict { margin:.9rem 0 0; padding:.75rem .9rem; border-radius:8px; background:var(--warn-bg); color:var(--warn); font-size:.9rem; font-weight:500; }
+  .ln { display:flex; justify-content:space-between; gap:1rem; padding:.55rem 0; border-bottom:1px solid var(--line); font-size:.92rem; }
+  .ln .v { font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .ln .l small { display:block; color:var(--ink-soft); font-size:.76rem; }
+  .ln.total { border-bottom:0; font-size:1rem; }
+  .sec { margin-top:1.1rem; font-size:.8rem; color:var(--ink-soft); font-weight:700; letter-spacing:.05em; }
+  .empty { color:var(--ink-soft); text-align:center; padding:1.5rem 0; font-size:.92rem; }
+  .cta { text-align:center; }
+  .cta p { margin:0 0 .8rem; font-size:.95rem; }
+  .btns { display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+  .btn { display:inline-flex; padding:.7rem 1.2rem; border-radius:999px; font-weight:700; font-size:.92rem; text-decoration:none; }
+  .btn.line { background:var(--line-green); color:#fff; }
+  .btn.tel { background:var(--ink); color:var(--bg); }
+  .btn.alt { background:var(--accent-bg); color:var(--accent); }
+  footer { text-align:center; font-size:.74rem; color:var(--ink-soft); margin-top:1.5rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">邱</div>
+    <div><div class="name">高雄房仲邱姐｜邱靜慧</div><div class="sub">第一次買房，可以先問邱姐</div></div>
+  </header>
+
+  <h1>頭期款之外，還要準備多少？</h1>
+  <p class="lede">輸入房子總價，一次列出契稅、代書、仲介費、火險、搬家這些「沒人先講」的錢。</p>
+
+  <div class="card">
+    <label class="t" for="price">房屋總價</label>
+    <div class="inp"><input id="price" type="number" inputmode="decimal" min="0" max="50000" placeholder="例如：1000"><span>萬</span></div>
+    <div class="group">
+      <label class="t">銀行貸幾成</label>
+      <div class="seg" id="ltv">
+        <button data-v="0.8" class="on">8 成</button>
+        <button data-v="0.7">7 成</button>
+        <button data-v="0.6">6 成</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card result" id="out"><div class="empty">輸入總價，清單會出現在這裡</div></div>
+
+  <div class="card cta">
+    <p>每間房子的契稅、規費都不一樣，想知道你看中的那間實際要多少，傳給我，我幫你算準的。</p>
+    <div class="btns">
+      <a class="btn line" href="https://line.me/R/ti/p/@530myzmv" target="_blank" rel="noopener">加 LINE 問邱姐</a>
+      <a class="btn tel" href="tel:0921203586">打電話給邱姐</a>
+      <a class="btn alt" href="/tools/afford">算我買得起多少</a>
+    </div>
+  </div>
+
+  <footer><a href="/tools" style="color:inherit;font-size:.9rem;font-weight:700">← 看其他買房試算工具</a><br><br>本試算僅供參考，稅費以實際核定為準，貸款成數以銀行鑑價為準。｜版本：2026-09<br>© 2026 高雄房仲邱姐／邱靜慧</footer>
+</div>
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  let ltv = 0.8;
+  $('ltv').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    $('ltv').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+    ltv = parseFloat(b.dataset.v); calc();
+  });
+  $('price').addEventListener('input', calc);
+  const yuan = x => Math.round(x).toLocaleString('zh-TW') + ' 元';
+  const wan = x => (Math.round(x/1000)/10).toLocaleString('zh-TW') + ' 萬';
+
+  function calc(){
+    const v = parseFloat($('price').value);
+    if (!(v > 0)) { $('out').innerHTML = '<div class="empty">輸入總價，清單會出現在這裡</div>'; return; }
+    const P = Math.min(v, 50000) * 10000;
+    const down = P * (1 - ltv);
+    // 預估值（待邱姐核對高雄行情）
+    const items = [
+      ['簽約到交屋要付的', null],
+      ['契稅、印花稅、登記規費', P * 0.009, '依公告現值計算，這裡抓總價約 0.9%'],
+      ['代書費', 20000, '含買賣與設定登記'],
+      ['仲介服務費', P * 0.02, '買方一般 1～2%，可議'],
+      ['履約保證費', Math.max(3000, P * 0.0003), ''],
+      ['火險＋地震險', 4000, '銀行貸款必保'],
+      ['貸款開辦費', 6000, '各家銀行不同'],
+      ['入住前會花的', null],
+      ['搬家、清潔', 20000, ''],
+    ];
+    let fees = 0, rows = '';
+    for (const [name, amt, note] of items) {
+      if (amt === null) { rows += `<div class="sec">${name}</div>`; continue; }
+      fees += amt;
+      rows += `<div class="ln"><span class="l">${name}${note ? `<small>${note}</small>` : ''}</span><span class="v">${yuan(amt)}</span></div>`;
+    }
+    $('out').innerHTML = `
+      <div class="big">
+        <div class="k">頭期款＋雜費，一共要準備</div>
+        <div class="v">${wan(down + fees)}</div>
+        <div class="s">頭期款 ${wan(down)} ＋ 雜費 ${wan(fees)}（裝潢、家電另計）</div>
+      </div>
+      <div class="verdict">很多人只準備頭期款 ${wan(down)}，實際上要多準備約 ${wan(fees)}。另外建議再留 6 個月生活費當備用金。</div>
+      ${rows}
+      <div class="ln total"><span class="l"><b>雜費合計</b></span><span class="v">${yuan(fees)}</span></div>`;
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>購屋能力試算｜高雄房仲邱姐</title>
+<meta name="description" content="輸入月收入和手上現金，30 秒算出你在高雄買得起多少錢的房子，以及你是卡在月付還是卡在自備款。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --bg:#F5F3F0; --surface:#FFFFFF; --line:#E4DED6; --soft:#F3EEE8;
+    --ink:#1E2430; --ink-mid:#4B5563; --ink-soft:#7A8290;
+    --accent:#B0463A; --accent-ink:#FFFFFF; --accent-bg:#F8E9E6;
+    --warn:#9A5B12; --warn-bg:#FBF1E2;
+    --line-green:#06C755; --radius:12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#23272F;
+      --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+      --accent:#E07A6C; --accent-ink:#1A0F0D; --accent-bg:#34211E;
+      --warn:#E0AE6A; --warn-bg:#2E2517;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#23272F;
+    --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+    --accent:#E07A6C; --accent-ink:#1A0F0D; --accent-bg:#34211E;
+    --warn:#E0AE6A; --warn-bg:#2E2517;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:40rem; margin:0 auto; padding:1.25rem 16px 3rem; }
+  header { display:flex; align-items:center; gap:.8rem; margin-bottom:1.25rem; }
+  .logo { width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+    display:grid; place-items:center; font-weight:700; font-size:1.2rem; flex:none; }
+  header .name { font-weight:700; font-size:1.05rem; }
+  header .sub { font-size:.8rem; color:var(--ink-soft); }
+  h1 { font-size:1.5rem; margin:0 0 .2rem; }
+  .lede { color:var(--ink-mid); margin:0 0 1.25rem; font-size:.92rem; }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:1.2rem; margin-bottom:1rem; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
+  @media (max-width:480px){ .row2 { grid-template-columns:1fr; } }
+  label.t { display:block; font-size:.85rem; font-weight:500; margin-bottom:.3rem; }
+  .t small { color:var(--ink-soft); font-weight:400; }
+  .inp { display:flex; align-items:center; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
+  .inp:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-bg); }
+  .inp input { flex:1; min-width:0; border:0; background:transparent; color:var(--ink); font:inherit; font-size:1.05rem; padding:.6rem .75rem; outline:none; }
+  .inp span { padding-right:.75rem; color:var(--ink-soft); font-size:.9rem; }
+  .group { margin-top:1rem; }
+  .seg { display:flex; background:var(--soft); border-radius:8px; padding:3px; gap:3px; }
+  .seg button { flex:1; border:0; background:transparent; color:var(--ink-mid); font:inherit; font-size:.88rem;
+    padding:.55rem .3rem; border-radius:6px; cursor:pointer; line-height:1.3; }
+  .seg button small { display:block; font-size:.72rem; opacity:.8; }
+  .seg button.on { background:var(--accent); color:var(--accent-ink); font-weight:700; }
+  details.more { margin-top:1rem; font-size:.85rem; color:var(--ink-mid); }
+  details.more summary { cursor:pointer; color:var(--ink-soft); }
+  details.more .inp { max-width:10rem; margin-top:.4rem; }
+
+  .result { border:2px solid var(--accent); }
+  .big { background:var(--accent); color:var(--accent-ink); border-radius:10px; padding:1rem 1.1rem; }
+  .big .k { font-size:.85rem; opacity:.9; }
+  .big .v { font-size:2.2rem; font-weight:700; line-height:1.2; margin:.15rem 0; font-variant-numeric:tabular-nums; }
+  .big .s { font-size:.82rem; opacity:.9; }
+  .verdict { margin:.9rem 0 0; padding:.75rem .9rem; border-radius:8px; background:var(--warn-bg); color:var(--warn); font-size:.9rem; font-weight:500; }
+  .lines { margin-top:.9rem; }
+  .ln { display:flex; justify-content:space-between; gap:1rem; padding:.55rem 0; border-bottom:1px solid var(--line); font-size:.92rem; }
+  .ln:last-child { border-bottom:0; }
+  .ln .v { font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .ln .l small { display:block; color:var(--ink-soft); font-size:.76rem; }
+  .sec { margin-top:1.1rem; font-size:.8rem; color:var(--ink-soft); font-weight:700; letter-spacing:.05em; }
+  .empty { color:var(--ink-soft); text-align:center; padding:1.5rem 0; font-size:.92rem; }
+
+  .tips { font-size:.86rem; color:var(--ink-mid); }
+  .tips h2 { font-size:1rem; margin:0 0 .5rem; color:var(--ink); }
+  .tips ul { margin:0; padding-left:1.2rem; }
+  .tips li { margin-bottom:.35rem; }
+
+  .cta { text-align:center; }
+  .cta p { margin:0 0 .8rem; font-size:.95rem; }
+  .btns { display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+  .btn { display:inline-flex; align-items:center; gap:.4rem; padding:.7rem 1.2rem; border-radius:999px;
+    font-weight:700; font-size:.92rem; text-decoration:none; }
+  .btn.line { background:var(--line-green); color:#fff; }
+  .btn.tel { background:var(--ink); color:var(--bg); }
+  footer { text-align:center; font-size:.74rem; color:var(--ink-soft); margin-top:1.5rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">邱</div>
+    <div>
+      <div class="name">高雄房仲邱姐｜邱靜慧</div>
+      <div class="sub">第一次買房，可以先問邱姐</div>
+    </div>
+  </header>
+
+  <h1>我買得起多少錢的房子？</h1>
+  <p class="lede">填兩個數字，30 秒算出你的購屋上限，還有你到底是卡在「月付」還是卡在「頭期款」。資料只在你手機上算，不會傳出去。</p>
+
+  <div class="card">
+    <div class="row2">
+      <div>
+        <label class="t" for="income">家庭月收入 <small>（夫妻合計）</small></label>
+        <div class="inp"><input id="income" type="number" inputmode="decimal" min="0" max="500" placeholder="例如：8"><span>萬</span></div>
+      </div>
+      <div>
+        <label class="t" for="cash">手上可動用的現金</label>
+        <div class="inp"><input id="cash" type="number" inputmode="decimal" min="0" max="50000" placeholder="例如：300"><span>萬</span></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <label class="t">收入拿幾成來繳房貸？</label>
+      <div class="seg" id="ratio">
+        <button data-v="0.3" class="on">穩穩的<small>3 成</small></button>
+        <button data-v="0.4">拚一點<small>4 成</small></button>
+        <button data-v="0.5">很拚<small>5 成</small></button>
+      </div>
+    </div>
+
+    <div class="group">
+      <label class="t">貸款年限</label>
+      <div class="seg" id="years">
+        <button data-v="20">20 年</button>
+        <button data-v="30" class="on">30 年</button>
+        <button data-v="40">40 年</button>
+      </div>
+    </div>
+
+    <details class="more">
+      <summary>進階：自己改利率（預設 2.3%）</summary>
+      <div class="inp"><input id="rate" type="number" inputmode="decimal" step="0.01" min="0" max="10" value="2.3"><span>%</span></div>
+    </details>
+  </div>
+
+  <div class="card result" id="out">
+    <div class="empty">填入月收入和現金，結果會出現在這裡</div>
+  </div>
+
+  <div class="card tips">
+    <h2>邱姐提醒你三件事</h2>
+    <ul>
+      <li><b>銀行貸幾成，看的是「鑑價」不是成交價。</b>鑑價常常比成交價低，所以上面同時給你 8 成和 7 成兩種結果。</li>
+      <li><b>頭期款不是全部。</b>契稅、代書、仲介服務費、火險、搬家、冷氣窗簾，這裡先抓總價約 3% 的雜支，裝潢另計。</li>
+      <li><b>寬限期很香，但結束後月付會跳三到五成。</b>要用寬限期，請用「結束後」的月付來評估自己扛不扛得住。</li>
+    </ul>
+  </div>
+
+  <div class="card cta">
+    <p>算出來的數字比想像中少？別急，這個價位在高雄還有很多好選擇。<br>有新青安等政策房貸資格的話，條件會更好——直接問我。</p>
+    <div class="btns">
+      <a class="btn line" href="https://line.me/R/ti/p/@530myzmv" target="_blank" rel="noopener">加 LINE 問邱姐</a>
+      <a class="btn tel" href="tel:0921203586">打電話給邱姐</a>
+    </div>
+  </div>
+
+  <footer><a href="/tools" style="color:inherit;font-size:.9rem;font-weight:700">← 看其他買房試算工具</a><br><br>本試算僅供參考，實際額度、利率與成數以銀行核貸結果為準。｜利率版本：2026-09<br>© 2026 高雄房仲邱姐／邱靜慧</footer>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const FEE = 0.03;          // 買方雜支：仲介服務費、契稅規費代書、火險等，約總價 3%
+  const state = { ratio:0.3, years:30 };
+
+  document.querySelectorAll('.seg').forEach(seg => {
+    seg.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      seg.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+      state[seg.id] = parseFloat(b.dataset.v);
+      calc();
+    });
+  });
+  ['income','cash','rate'].forEach(id => $(id).addEventListener('input', calc));
+
+  // 月付 → 可貸金額（本息平均攤還）
+  function loanFromPay(m, r, n){ const i = r/12; return i === 0 ? m*n : m*(Math.pow(1+i,n)-1)/(i*Math.pow(1+i,n)); }
+  function payFromLoan(p, r, n){ const i = r/12; return i === 0 ? p/n : p*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1); }
+  const wan = x => Math.round(x/10000).toLocaleString('zh-TW') + ' 萬';
+  const yuan = x => Math.round(x).toLocaleString('zh-TW') + ' 元';
+  const num = (id, max) => { const v = parseFloat($(id).value); return isFinite(v) && v >= 0 ? Math.min(v, max) : NaN; };
+
+  function scenario(ltv, maxLoan, cash){
+    const byLoan = maxLoan / ltv;
+    const byCash = cash / (1 - ltv + FEE);
+    const price = Math.min(byLoan, byCash);
+    return { price, byLoan, byCash, loan: price*ltv, limitedBy: byCash < byLoan ? 'cash' : 'pay' };
+  }
+
+  function calc(){
+    const income = num('income', 500) * 10000;
+    const cash = num('cash', 50000) * 10000;
+    let rate = num('rate', 10); if (isNaN(rate)) rate = 2.3; rate /= 100;
+    const n = state.years * 12;
+    if (!(income > 0) || isNaN(cash)) {
+      $('out').innerHTML = '<div class="empty">填入月收入和現金，結果會出現在這裡</div>'; return;
+    }
+    const monthly = income * state.ratio;
+    const maxLoan = loanFromPay(monthly, rate, n);
+    const a = scenario(0.8, maxLoan, cash);
+    const b = scenario(0.7, maxLoan, cash);
+    const pay = payFromLoan(a.loan, rate, n);
+    const pay2 = payFromLoan(a.loan, rate + 0.005, n);
+    const down = a.price - a.loan, fee = a.price * FEE;
+    // 鑑價偏低只貸 7 成：同一間房要多準備的現金；現金不夠就改講降到多少
+    const extra = a.price * 0.1;
+    const b7 = cash >= a.price * (0.3 + FEE)
+      ? `若銀行鑑價偏低只貸 7 成，同一間房要多準備 ${wan(extra)} 現金（你的現金還夠）`
+      : `若銀行鑑價偏低只貸 7 成，上限會降到約 ${wan(b.price)}`;
+
+    const verdict = a.limitedBy === 'cash'
+      ? `⚠️ 你卡在「現金」，不是月付。月付其實撐得起 ${wan(a.byLoan)} 的房子，但頭期款只夠買到 ${wan(a.byCash)}。多存一點頭期款，能買的價位會直接往上跳。`
+      : `你卡在「月付」。現金其實夠買到 ${wan(a.byCash)}，但以每月 ${yuan(monthly)} 的預算，月付只撐得起 ${wan(a.byLoan)}。拉長年限或提高收入佔比，上限會往上走。`;
+
+    $('out').innerHTML = `
+      <div class="big">
+        <div class="k">建議購屋總價上限（銀行貸 8 成）</div>
+        <div class="v">${wan(a.price)}</div>
+        <div class="s">${b7}</div>
+      </div>
+      <div class="verdict">${verdict}</div>
+      <div class="lines">
+        <div class="sec">每個月</div>
+        <div class="ln"><span class="l">每月房貸</span><span class="v">${yuan(pay)}</span></div>
+        <div class="ln"><span class="l">利率升 2 碼時<small>升到 ${(rate*100+0.5).toFixed(2)}%</small></span><span class="v">${yuan(pay2)}</span></div>
+        <div class="sec">要準備的錢</div>
+        <div class="ln"><span class="l">預估貸款金額</span><span class="v">${wan(a.loan)}</span></div>
+        <div class="ln"><span class="l">頭期款<small>總價的 2 成</small></span><span class="v">${wan(down)}</span></div>
+        <div class="ln"><span class="l">稅費、仲介、代書等雜支<small>約總價 3%，裝潢另計</small></span><span class="v">${wan(fee)}</span></div>
+        <div class="ln"><span class="l">合計要準備的現金</span><span class="v">${wan(down+fee)}</span></div>
+      </div>`;
+  }
+})();
+</script>
+</body>
+</html>
