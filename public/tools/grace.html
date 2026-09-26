@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>寬限期到期試算｜高雄房仲邱姐</title>
+<meta name="description" content="寬限期到期後月付會跳多少？續繳、轉貸、盤點資產三條路一次算給你看，附轉貸回本試算與跟銀行談的清單。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700&display=swap">
+<style>
+  :root {
+    --bg:#F5F3F0; --surface:#FFFFFF; --line:#E4DED6; --soft:#F3EEE8;
+    --ink:#1E2430; --ink-mid:#4B5563; --ink-soft:#7A8290;
+    --accent:#B0463A; --accent-ink:#FFFFFF; --accent-bg:#F8E9E6;
+    --ok:#2F6B3F; --ok-bg:#E7F1E9; --warn:#9A5B12; --warn-bg:#FBF1E2; --gold:#C9A24B;
+    --line-green:#06C755; --radius:12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#23272F;
+      --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+      --accent:#E07A6C; --accent-ink:#1A0F0D; --accent-bg:#34211E;
+      --ok:#7CC48D; --ok-bg:#1D2B21; --warn:#E0AE6A; --warn-bg:#2E2517;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#23272F;
+    --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+    --accent:#E07A6C; --accent-ink:#1A0F0D; --accent-bg:#34211E;
+    --ok:#7CC48D; --ok-bg:#1D2B21; --warn:#E0AE6A; --warn-bg:#2E2517;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:32rem; margin:0 auto; padding:1.25rem 16px 3rem; }
+  header { display:flex; align-items:center; gap:.8rem; margin-bottom:1.1rem; }
+  .logo { width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+    display:grid; place-items:center; font-weight:700; font-size:1.2rem; flex:none; }
+  header .name { font-weight:700; font-size:1.05rem; }
+  header .sub { font-size:.8rem; color:var(--ink-soft); }
+  .hide { display:none !important; }
+
+  .hero { background:linear-gradient(135deg,#2A2F3A,#12151B); color:#F5F3F0; border-radius:var(--radius); padding:1.4rem 1.2rem 1.2rem; margin-bottom:1rem; }
+  .hero h1 { font-family:"Noto Serif TC",serif; font-size:1.8rem; line-height:1.3; margin:0; letter-spacing:.03em; }
+  .hero p { margin:.5rem 0 0; font-size:.9rem; opacity:.85; }
+
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:1.2rem; margin-bottom:1rem; }
+  h2 { font-size:1.08rem; margin:0 0 .3rem; }
+  .muted { font-size:.84rem; color:var(--ink-mid); margin:0 0 .8rem; }
+  label.t { display:block; font-size:.86rem; font-weight:500; margin:.9rem 0 .3rem; }
+  label.t:first-of-type { margin-top:0; }
+  label.t small { color:var(--ink-soft); font-weight:400; }
+  .inp { display:flex; align-items:center; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
+  .inp:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-bg); }
+  .inp input { flex:1; min-width:0; border:0; background:transparent; color:var(--ink); font:inherit; font-size:1.05rem; padding:.6rem .75rem; outline:none; font-variant-numeric:tabular-nums; }
+  .inp span { padding-right:.75rem; color:var(--ink-soft); font-size:.9rem; white-space:nowrap; }
+  .seg { display:flex; background:var(--soft); border-radius:8px; padding:3px; gap:3px; }
+  .seg button { flex:1; border:0; background:transparent; color:var(--ink-mid); font:inherit; font-size:.88rem;
+    padding:.5rem .3rem; border-radius:6px; cursor:pointer; line-height:1.3; }
+  .seg button small { display:block; font-size:.7rem; opacity:.8; }
+  .seg button.on { background:var(--accent); color:var(--accent-ink); font-weight:700; }
+  .bigbtn { display:block; width:100%; border:0; border-radius:10px; font:inherit; font-size:1.02rem; font-weight:700;
+    padding:.85rem 1rem; cursor:pointer; margin-top:1rem; background:var(--accent); color:var(--accent-ink); }
+
+  .jump { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:.5rem; text-align:center; }
+  .jump .box { background:var(--soft); border-radius:10px; padding:.8rem .4rem; }
+  .jump .box.after { background:var(--accent); color:var(--accent-ink); }
+  .jump .k { font-size:.76rem; opacity:.85; }
+  .jump .v { font-size:1.4rem; font-weight:900; font-variant-numeric:tabular-nums; line-height:1.3; }
+  .jump .arrow { font-size:1.4rem; color:var(--ink-soft); }
+  .jumpnote { text-align:center; margin-top:.8rem; font-weight:700; color:var(--accent); }
+  .jumpnote small { display:block; font-weight:400; color:var(--ink-mid); font-size:.84rem; }
+
+  .road { display:flex; gap:.75rem; padding:.8rem 0; border-bottom:1px solid var(--line); }
+  .road:last-child { border-bottom:0; }
+  .road .n { width:1.7rem; height:1.7rem; border-radius:50%; background:var(--accent-bg); color:var(--accent); font-weight:900;
+    display:grid; place-items:center; flex:none; }
+  .road b { display:block; }
+  .road .d { font-size:.87rem; color:var(--ink-mid); }
+  .road .money { font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums; }
+
+  .out { margin-top:1rem; background:var(--soft); border-radius:10px; padding:.9rem 1rem; }
+  .out .big { font-size:1.5rem; font-weight:900; font-variant-numeric:tabular-nums; }
+  .out .s { font-size:.84rem; color:var(--ink-mid); }
+  .verdict { border-radius:8px; padding:.7rem .85rem; margin-top:.7rem; font-size:.9rem; font-weight:500; }
+  .verdict.ok { background:var(--ok-bg); color:var(--ok); }
+  .verdict.warn { background:var(--warn-bg); color:var(--warn); }
+  table.fee { width:100%; border-collapse:collapse; font-size:.88rem; margin-top:.8rem; }
+  table.fee td { padding:.45rem .2rem; border-bottom:1px solid var(--line); vertical-align:top; }
+  table.fee td:last-child { text-align:right; font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  table.fee td small { display:block; color:var(--ink-soft); font-size:.74rem; font-weight:400; }
+  table.fee tr.total td { border-bottom:0; font-size:1rem; padding-top:.6rem; }
+
+  .chk { display:flex; gap:.6rem; align-items:flex-start; padding:.5rem 0; border-bottom:1px solid var(--line); font-size:.92rem; cursor:pointer; }
+  .chk:last-of-type { border-bottom:0; }
+  .chk input { width:1.15rem; height:1.15rem; margin-top:.2rem; accent-color:var(--accent); flex:none; }
+  .say { background:var(--soft); border-left:3px solid var(--gold); border-radius:0 8px 8px 0; padding:.65rem .8rem; margin-top:.6rem; font-size:.9rem; }
+  .say b { display:block; font-size:.78rem; color:var(--ink-soft); font-weight:500; }
+
+  .q { padding:.8rem 0; border-bottom:1px solid var(--line); }
+  .q:last-child { border-bottom:0; }
+  .q .qt { font-weight:700; font-size:.95rem; margin-bottom:.5rem; }
+  .ans { margin-top:.6rem; font-size:.9rem; }
+
+  .note { font-size:.76rem; color:var(--ink-soft); margin-top:.6rem; }
+  .cta { text-align:center; }
+  .cta p { margin:0 0 .8rem; font-size:.95rem; }
+  .btns { display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+  .btn { display:inline-flex; align-items:center; gap:.4rem; padding:.7rem 1.2rem; border-radius:999px;
+    font-weight:700; font-size:.92rem; text-decoration:none; }
+  .btn.line { background:var(--line-green); color:#fff; }
+  .btn.tel { background:var(--ink); color:var(--bg); }
+  footer { text-align:center; font-size:.74rem; color:var(--ink-soft); margin-top:1.5rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">邱</div>
+    <div>
+      <div class="name">高雄房仲邱姐｜邱靜慧</div>
+      <div class="sub">房子的事，先算清楚再決定</div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>寬限期到期，<br>月付會跳多少？</h1>
+    <p>只繳利息的日子快結束了。先把數字算出來，才有時間選路。</p>
+  </div>
+
+  <!-- ① 輸入 -->
+  <div class="card">
+    <label class="t">貸款餘額 <small>（還欠多少填多少）</small></label>
+    <div class="inp"><input id="amt" type="number" inputmode="numeric" value="800" min="1"><span>萬元</span></div>
+    <label class="t">現在的房貸利率 <small>（看撥款通知或存摺扣款明細）</small></label>
+    <div class="inp"><input id="rate" type="number" inputmode="decimal" value="2.3" step="0.01" min="0" max="10"><span>%</span></div>
+    <label class="t">貸款總年期</label>
+    <div class="seg" id="years"><button data-v="20">20 年</button><button data-v="30" class="on">30 年</button><button data-v="40">40 年</button></div>
+    <label class="t">寬限期幾年</label>
+    <div class="seg" id="grace"><button data-v="2">2 年</button><button data-v="3" class="on">3 年<small>一般常見</small></button><button data-v="5">5 年<small>新青安</small></button></div>
+    <button class="bigbtn" onclick="calc(true)">算給我看</button>
+  </div>
+
+  <div id="result" class="hide">
+    <!-- ② 跳多少 -->
+    <div class="card">
+      <h2>到期那個月起</h2>
+      <div class="jump">
+        <div class="box"><div class="k">寬限期內（只繳息）</div><div class="v" id="rNow">—</div></div>
+        <div class="arrow">→</div>
+        <div class="box after"><div class="k">寬限期到期後</div><div class="v" id="rAfter">—</div></div>
+      </div>
+      <div class="jumpnote" id="rJump"></div>
+      <p class="note">寬限期不是不用繳，是只繳利息、本金一毛沒少。到期後，整筆本金要擠進「剩下的年期」攤還，所以月付才會跳這麼多。</p>
+    </div>
+
+    <!-- ③ 三條路 -->
+    <div class="card">
+      <h2>你手上其實有三條路</h2>
+      <p class="muted">沒有標準答案，只有適不適合你。</p>
+      <div class="road"><span class="n">1</span><div><b>咬牙續繳</b><div class="d">每月 <span class="money" id="road1">—</span>。收入穩、撐得住，這條最單純，本金開始往下掉，不用付任何額外費用。</div></div></div>
+      <div class="road"><span class="n">2</span><div><b>轉貸重拉年期</b><div class="d">把餘額轉到別家、重新拉 30 年，月付約降到 <span class="money" id="road2">—</span>。但要付規費、代書費，綁約期內還有違約金，而且總利息會變多。划不划算，下面幫你算。</div></div></div>
+      <div class="road"><span class="n">3</span><div><b>趁機盤點資產</b><div class="d">房子這幾年如果有漲，先搞清楚現在值多少——知道市值，才知道該守、該換、還是該調整。</div></div></div>
+    </div>
+
+    <!-- ④ 轉貸划算嗎 -->
+    <div class="card">
+      <h2>轉貸划不划算？算回本要幾個月</h2>
+      <p class="muted">轉貸不能只看利率差，各種費用加起來，常常吃掉第一年省下的利息。</p>
+      <label class="t">別家開給你的利率</label>
+      <div class="inp"><input id="newRate" type="number" inputmode="decimal" value="2.1" step="0.01" min="0" max="10"><span>%</span></div>
+      <label class="t">現在的貸款還在綁約期內嗎？ <small>（通常撥款後 2～3 年）</small></label>
+      <div class="seg" id="lock"><button data-v="0" class="on">已經過了</button><button data-v="1">還在綁約期</button><button data-v="2">不知道</button></div>
+      <div id="refiOut"></div>
+    </div>
+
+    <!-- ⑤ 房子養出多少空間 -->
+    <div class="card">
+      <h2>你的房子這幾年養出多少空間？</h2>
+      <p class="muted">房子漲上去的部分，就像一筆「睡著的額度」。寬限期到期，剛好是盤點的時間點。</p>
+      <label class="t">房子現在大約值多少 <small>（不確定就先填當初買價）</small></label>
+      <div class="inp"><input id="mv" type="number" inputmode="numeric" placeholder="例如 1500" min="0"><span>萬元</span></div>
+      <label class="t">銀行可貸成數 <small>（一般抓 7 成，實際看鑑價）</small></label>
+      <div class="seg" id="ltv"><button data-v="0.7" class="on">7 成</button><button data-v="0.75">7.5 成</button><button data-v="0.8">8 成</button></div>
+      <div id="eqOut"></div>
+    </div>
+
+    <!-- ⑥ 決策三問 -->
+    <div class="card">
+      <h2>不知道選哪條？回答三個問題</h2>
+      <div class="q">
+        <div class="qt">Q1　到期後的月付，會超過家庭月收入的 4 成嗎？</div>
+        <label class="t" style="margin-top:0">全家每月收入大約</label>
+        <div class="inp"><input id="income" type="number" inputmode="numeric" placeholder="例如 90000" min="0"><span>元</span></div>
+        <div class="ans" id="a1"></div>
+      </div>
+      <div class="q" id="q2">
+        <div class="qt">Q2　未來 5～10 年，你會一直住這間嗎？</div>
+        <div class="seg" id="stay"><button data-v="1">會，住很久</button><button data-v="0">不一定</button></div>
+        <div class="ans" id="a2"></div>
+      </div>
+      <div class="q" id="q3">
+        <div class="qt">Q3　你知道房子「現在」實際值多少嗎？</div>
+        <div class="seg" id="know"><button data-v="1">知道，而且有漲</button><button data-v="0">不太確定</button></div>
+        <div class="ans" id="a3"></div>
+      </div>
+    </div>
+
+    <!-- ⑦ 先跟原銀行談 -->
+    <div class="card">
+      <h2>第一步：先打給原本的銀行</h2>
+      <p class="muted">銀行最怕的不是你繳不出來，是你轉走。所以「先談」永遠是成本最低的一步。打電話前，先把這幾項準備好：</p>
+      <label class="chk"><input type="checkbox">寬限期確切哪個月到期（撥款通知書或網銀貸款明細）</label>
+      <label class="chk"><input type="checkbox">綁約期過了沒（沒過就轉走會有違約金）</label>
+      <label class="chk"><input type="checkbox">近一年信用卡、貸款有沒有遲繳過（有的話籌碼會少很多）</label>
+      <label class="chk"><input type="checkbox">先查 2～3 家別的銀行現在的房貸利率（談的時候要有比價）</label>
+      <label class="chk"><input type="checkbox">想清楚要談哪一件：延長寬限期？降利率？拉長年期？一次談一個</label>
+      <div class="say"><b>開場，講事實就好</b>「我的寬限期 ○ 月到期，到期後月付會從 ○ 萬變 ○ 萬。想請問行內有沒有延長寬限期或調整條件的方案？」</div>
+      <div class="say"><b>被打回票時，拿出比價</b>「我查過 ○○ 銀行轉貸利率是 ○%。我在這裡往來 ○ 年、從來沒遲繳，希望行內給我一個留下來的理由。」</div>
+      <div class="say"><b>收尾，要時間、要書面</b>「麻煩幫我送評估，大概幾個工作天會有結果？結果請用簡訊或 Email 通知我。」</div>
+      <p class="note">⚠️ 延長寬限期＝本金更晚開始還、總利息更多。它是「爭取時間」，不是省錢；談到了，那段時間要拿來安排下一步。</p>
+    </div>
+  </div>
+
+  <div class="card cta">
+    <p>把「到期月份＋現在月付＋大概市值」傳給我，<br>我幫你把你那條路的數字實際算一遍，也可以免費幫你估現在的行情。</p>
+    <div class="btns">
+      <a class="btn line" href="https://line.me/R/ti/p/@530myzmv" target="_blank" rel="noopener">加 LINE 問邱姐</a>
+      <a class="btn tel" href="tel:0921203586">打電話給邱姐</a>
+    </div>
+  </div>
+
+  <footer><a href="/tools" style="color:inherit;font-size:.9rem;font-weight:700">← 看其他買房試算工具</a><br><br>
+    本試算採本息平均攤還估算，費用為常見行情參考，僅供參考。<br>
+    實際月付、利率、轉貸條件與費用以各銀行核定與代書報價為準。｜版本：2026-09<br>
+    © 2026 高雄房仲邱姐／邱靜慧
+  </footer>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt = n => Math.round(n).toLocaleString('zh-TW');
+const segVal = id => { const b = document.querySelector('#' + id + ' button.on'); return b ? b.dataset.v : null; };
+function pmt(P, r, n){ if (r === 0) return P / n; const m = Math.pow(1 + r, n); return P * r * m / (m - 1); }
+
+document.querySelectorAll('.seg').forEach(seg => seg.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+  seg.querySelectorAll('button').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  if (!$('result').classList.contains('hide')) calc(false);
+})));
+['amt','rate','newRate','mv','income'].forEach(id => $(id).addEventListener('input', () => { if (!$('result').classList.contains('hide')) calc(false); }));
+
+let S = null;
+function calc(scroll){
+  const P = (parseFloat($('amt').value) || 0) * 10000;
+  const rate = (parseFloat($('rate').value) || 0) / 100;
+  const Y = +segVal('years'), G = +segVal('grace');
+  if (P <= 0 || G >= Y){ alert('請確認：貸款餘額要大於 0，寬限期要比總年期短'); return; }
+  const r = rate / 12;
+  const now = P * r;
+  const after = pmt(P, r, (Y - G) * 12);
+  const refi = pmt(P, r, 360);
+  S = { P, r, Y, G, now, after };
+  $('rNow').textContent = fmt(now) + ' 元';
+  $('rAfter').textContent = fmt(after) + ' 元';
+  $('rJump').innerHTML = `每月多繳 ${fmt(after - now)} 元<small>月付變成原本的 ${now > 0 ? (after / now).toFixed(1) : '—'} 倍，一年多繳 ${fmt((after - now) * 12)} 元</small>`;
+  $('road1').textContent = fmt(after) + ' 元';
+  $('road2').textContent = fmt(refi) + ' 元';
+  refiCalc(); equity(); decide();
+  $('result').classList.remove('hide');
+  if (scroll) $('result').scrollIntoView({ behavior:'smooth' });
+}
+
+/* 轉貸費用與回本月數 */
+function refiCalc(){
+  const { P, r, Y, G } = S;
+  const nr = (parseFloat($('newRate').value) || 0) / 100 / 12;
+  const lock = segVal('lock');
+  const n = (Y - G) * 12;                         // 同樣年期比，只看利率差省多少
+  const save = pmt(P, r, n) - pmt(P, nr, n);
+  const fees = [
+    { t:'提前清償違約金', s: lock === '0' ? '綁約期已過，免' : '綁約期內常見餘額 0.5%～1%，這裡抓 0.75%', v: lock === '0' ? 0 : P * 0.0075 },
+    { t:'抵押權塗銷＋設定規費', s:'設定金額（通常貸款 1.2 倍）× 0.1%', v: P * 1.2 * 0.001 },
+    { t:'代書費', s:'塗銷＋重新設定，常見 6 千～1 萬 2', v: 9000 },
+    { t:'銀行開辦、鑑價手續費', s:'0～1 萬不等，搶轉貸的銀行常會免，記得開口問', v: 5000 },
+    { t:'火險地震險重保', s:'受益銀行要換，原保單通常得重買', v: 3000 },
+  ];
+  const total = fees.reduce((a, f) => a + f.v, 0);
+  let html = `<table class="fee">` + fees.map(f => `<tr><td>${f.t}<small>${f.s}</small></td><td>${fmt(f.v)} 元</td></tr>`).join('') +
+    `<tr class="total"><td>費用合計（估）</td><td>${fmt(total)} 元</td></tr></table>`;
+  if (save <= 0){
+    html += `<div class="verdict warn">新利率沒有比較低，光轉貸本身省不到錢。想降月付，重點是「拉長年期」，那就要把總利息變多一起算進去。</div>`;
+  } else {
+    const months = total / save;
+    html += `<div class="out"><div class="s">利率從 ${(r*1200).toFixed(2)}% 降到 ${(nr*1200).toFixed(2)}%，每月省約</div><div class="big">${fmt(save)} 元</div>
+      <div class="s">費用 ${fmt(total)} 元 ÷ 每月省 ${fmt(save)} 元 ＝ 大約 <b>${Math.ceil(months)} 個月</b>回本</div></div>`;
+    if (lock === '2') html += `<div class="verdict warn">先打給原銀行問「我的限制清償期到什麼時候」。還在綁約期的話，違約金會讓回本時間拉長不少。</div>`;
+    if (months > 24) html += `<div class="verdict warn">回本超過 2 年，不急著轉。先拿別家利率回頭跟原銀行談，常常就談得下來。</div>`;
+    else if (months > 12) html += `<div class="verdict warn">回本 1～2 年，算是可以考慮。多比兩三家，再拿最好的條件回頭跟原銀行談一次。</div>`;
+    else html += `<div class="verdict ok">1 年內就回本，值得認真比三家銀行。</div>`;
+  }
+  html += `<p class="note">＊業務說的「幫你省多少」常常只講利率差，不講上面這張表。任何人報方案，拿這張一項一項問。</p>`;
+  $('refiOut').innerHTML = html;
+}
+
+/* 增值空間 */
+function equity(){
+  const mv = (parseFloat($('mv').value) || 0) * 10000;
+  if (mv <= 0){ $('eqOut').innerHTML = ''; return; }
+  const ltv = +segVal('ltv');
+  const space = mv * ltv - S.P;
+  $('eqOut').innerHTML = space <= 0
+    ? `<div class="out"><div class="big">目前空間有限</div><div class="s">市值 × ${ltv*10} 成還沒超過貸款餘額。先顧好月付，行情之後再盤。</div></div>`
+    : `<div class="out"><div class="s">理論上可動用的空間約</div><div class="big">${fmt(space/10000)} 萬</div>
+       <div class="s">＝ 市值 ${fmt(mv/10000)} 萬 × ${ltv*10} 成 − 貸款餘額 ${fmt(S.P/10000)} 萬</div></div>
+       <p class="note">這個數字的前提是「市值抓得準」。抓高了，空間是假的；抓低了，白白少算一筆。要不要動、怎麼動，每條路代價都不同，先弄清楚真實行情再說——我可以用實價登錄一筆一筆幫你比。</p>`;
+}
+
+/* 決策三問 */
+function decide(){
+  const inc = parseFloat($('income').value) || 0;
+  const q2 = $('q2'), q3 = $('q3');
+  if (inc <= 0){ $('a1').innerHTML = ''; q2.classList.add('hide'); q3.classList.add('hide'); return; }
+  const ratio = S.after / inc;
+  const pct = Math.round(ratio * 100);
+  if (ratio <= 0.4){
+    $('a1').innerHTML = `<div class="verdict ok">到期後月付佔收入約 ${pct}%，沒超過 4 成。<b>咬牙續繳</b>最單純：本金開始往下掉，也不用付任何額外費用。</div>`;
+    q2.classList.add('hide'); q3.classList.add('hide'); return;
+  }
+  $('a1').innerHTML = `<div class="verdict warn">到期後月付佔收入約 ${pct}%，超過 4 成了。硬撐下去，生活品質和抗風險能力都會出問題，往下看 Q2。</div>`;
+  q2.classList.remove('hide');
+  const stay = segVal('stay');
+  if (stay === null){ $('a2').innerHTML = ''; q3.classList.add('hide'); return; }
+  if (stay === '1'){
+    $('a2').innerHTML = `<div class="verdict ok">會住很久 → <b>轉貸重拉年期</b>。用上面的回本試算，回本快就轉，把月付壓回安全線。</div>`;
+    q3.classList.add('hide'); return;
+  }
+  $('a2').innerHTML = `<div class="verdict warn">幾年內可能換屋、換城市的話，先別急著付轉貸的費用，往下看 Q3。</div>`;
+  q3.classList.remove('hide');
+  const know = segVal('know');
+  $('a3').innerHTML = know === null ? '' : know === '1'
+    ? `<div class="verdict ok">知道而且有漲 → <b>做一次資產盤點</b>。漲上去的部分是你的選擇權：換屋、調整、或先留著，都要先確認真實行情再決定。</div>`
+    : `<div class="verdict warn">不確定 → <b>先做行情評估</b>。知道房子現在真正值多少，才有辦法做上面任何一個決定。這個我可以免費幫你估。</div>`;
+}
+</script>
+</body>
+</html>

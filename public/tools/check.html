@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中古屋查核清單｜高雄房仲邱姐</title>
+<meta name="description" content="買中古屋，帶看前該查完的 6 件事：屋齡、謄本、不動產說明書、漏水淹水、管委會的帳、行情比對。邊看邊勾，一件都不漏。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@700&display=swap">
+<style>
+  :root {
+    --bg:#F5F3F0; --surface:#FFFFFF; --line:#E4DED6; --soft:#F3EEE8;
+    --ink:#1E2430; --ink-mid:#4B5563; --ink-soft:#7A8290;
+    --accent:#B0463A; --accent-ink:#FFFFFF; --accent-bg:#F8E9E6;
+    --ok:#2F6B3F; --ok-bg:#E7F1E9; --warn:#9A5B12; --warn-bg:#FBF1E2; --gold:#C9A24B;
+    --z-rad:#C0504D; --z-sea:#D39B2A; --z-new:#3E8A57; --z-none:#D9D3CB;
+    --line-green:#06C755; --radius:12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#23272F;
+      --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+      --accent:#E07A6C; --accent-ink:#1A0F0D; --accent-bg:#34211E;
+      --ok:#7CC48D; --ok-bg:#1D2B21; --warn:#E0AE6A; --warn-bg:#2E2517;
+      --z-rad:#E07A6C; --z-sea:#E0AE6A; --z-new:#7CC48D; --z-none:#3A3F4A;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#14161B; --surface:#1C1F26; --line:#2C3039; --soft:#23272F;
+    --ink:#ECEEF2; --ink-mid:#B5BCC8; --ink-soft:#8A93A1;
+    --accent:#E07A6C; --accent-ink:#1A0F0D; --accent-bg:#34211E;
+    --ok:#7CC48D; --ok-bg:#1D2B21; --warn:#E0AE6A; --warn-bg:#2E2517;
+    --z-rad:#E07A6C; --z-sea:#E0AE6A; --z-new:#7CC48D; --z-none:#3A3F4A;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:34rem; margin:0 auto; padding:1.25rem 16px 3rem; }
+  header { display:flex; align-items:center; gap:.8rem; margin-bottom:1.1rem; }
+  .logo { width:44px; height:44px; border-radius:50%; background:var(--accent); color:var(--accent-ink);
+    display:grid; place-items:center; font-weight:700; font-size:1.2rem; flex:none; }
+  header .name { font-weight:700; font-size:1.05rem; }
+  header .sub { font-size:.8rem; color:var(--ink-soft); }
+
+  .hero { background:linear-gradient(135deg,#2A2F3A,#12151B); color:#F5F3F0; border-radius:var(--radius); padding:1.4rem 1.2rem 1.2rem; margin-bottom:1rem; }
+  .hero h1 { font-family:"Noto Serif TC",serif; font-size:1.75rem; line-height:1.3; margin:0; }
+  .hero p { margin:.6rem 0 0; font-size:.9rem; opacity:.88; }
+
+  .sticky { position:sticky; top:0; z-index:5; background:var(--bg); padding:.5rem 0 .6rem; }
+  .prog { display:flex; align-items:center; gap:.7rem; font-size:.85rem; color:var(--ink-mid); }
+  .bar { flex:1; height:8px; background:var(--soft); border-radius:4px; overflow:hidden; border:1px solid var(--line); }
+  .bar i { display:block; height:100%; background:var(--accent); width:0; transition:width .2s; }
+  .prog button { border:0; background:none; color:var(--ink-soft); font:inherit; font-size:.8rem; cursor:pointer; text-decoration:underline; }
+
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:1.2rem; margin-bottom:1rem; }
+  .num { font-family:"Noto Serif TC",serif; color:var(--gold); font-size:1.4rem; line-height:1; }
+  h2 { font-size:1.15rem; margin:.3rem 0 .4rem; line-height:1.45; }
+  .lead { font-size:.9rem; color:var(--ink-mid); margin:0 0 .6rem; }
+  .chk { display:flex; gap:.6rem; align-items:flex-start; padding:.5rem 0; border-top:1px solid var(--line); font-size:.94rem; cursor:pointer; }
+  .chk input { width:1.15rem; height:1.15rem; margin-top:.25rem; accent-color:var(--accent); flex:none; }
+  .chk.done span { color:var(--ink-soft); text-decoration:line-through; }
+  .tip { background:var(--soft); border-radius:8px; padding:.65rem .8rem; margin-top:.7rem; font-size:.86rem; color:var(--ink-mid); }
+  .say { background:var(--soft); border-left:3px solid var(--gold); border-radius:0 8px 8px 0; padding:.65rem .8rem; margin-top:.7rem; font-size:.9rem; }
+  .say b { display:block; font-size:.78rem; color:var(--ink-soft); font-weight:500; }
+
+  /* 屋齡對照 */
+  .yr { display:flex; gap:.5rem; align-items:center; margin:.4rem 0 .2rem; }
+  .seg { display:flex; background:var(--soft); border-radius:8px; padding:3px; gap:3px; flex:none; }
+  .seg button { border:0; background:transparent; color:var(--ink-mid); font:inherit; font-size:.85rem; padding:.45rem .6rem; border-radius:6px; cursor:pointer; }
+  .seg button.on { background:var(--accent); color:var(--accent-ink); font-weight:700; }
+  .inp { flex:1; min-width:0; display:flex; align-items:center; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
+  .inp:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-bg); }
+  .inp input { flex:1; min-width:0; border:0; background:transparent; color:var(--ink); font:inherit; font-size:1.05rem; padding:.5rem .7rem; outline:none; }
+  .inp span { padding-right:.7rem; color:var(--ink-soft); font-size:.88rem; }
+  .tl { position:relative; margin:1.4rem 0 .3rem; height:14px; border-radius:7px; background:var(--z-none); }
+  .tl .z { position:absolute; top:0; height:100%; }
+  .tl .z.rad { background:var(--z-rad); }
+  .tl .z.sea { background:var(--z-sea); }
+  .tl .z.new { background:var(--z-new); border-radius:0 7px 7px 0; }
+  .tl .pin { position:absolute; top:-1.35rem; transform:translateX(-50%); font-size:.72rem; font-weight:700; white-space:nowrap; color:var(--ink); }
+  .tl .pin::after { content:""; position:absolute; left:50%; top:1.05rem; width:2px; height:1.6rem; background:var(--ink); transform:translateX(-50%); }
+  .tlx { display:flex; justify-content:space-between; font-size:.7rem; color:var(--ink-soft); }
+  .legend { display:flex; flex-wrap:wrap; gap:.4rem .9rem; font-size:.78rem; color:var(--ink-mid); margin-top:.6rem; }
+  .legend i { display:inline-block; width:.7rem; height:.7rem; border-radius:2px; margin-right:.3rem; vertical-align:-.05rem; }
+  .yrout { margin-top:.8rem; }
+  .verdict { border-radius:8px; padding:.7rem .85rem; font-size:.9rem; }
+  .verdict.warn { background:var(--warn-bg); color:var(--warn); }
+  .verdict.ok { background:var(--ok-bg); color:var(--ok); }
+
+  .cta { text-align:center; }
+  .cta p { margin:0 0 .8rem; font-size:.95rem; }
+  .btns { display:flex; gap:.6rem; justify-content:center; flex-wrap:wrap; }
+  .btn { display:inline-flex; align-items:center; gap:.4rem; padding:.7rem 1.2rem; border-radius:999px;
+    font-weight:700; font-size:.92rem; text-decoration:none; }
+  .btn.line { background:var(--line-green); color:#fff; }
+  .btn.tel { background:var(--ink); color:var(--bg); }
+  footer { text-align:center; font-size:.74rem; color:var(--ink-soft); margin-top:1.5rem; }
+  @media print { .sticky, .cta, .prog button { display:none; } .card { break-inside:avoid; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">邱</div>
+    <div>
+      <div class="name">高雄房仲邱姐｜邱靜慧</div>
+      <div class="sub">幫買方不買貴，幫賣方不賣低</div>
+    </div>
+  </header>
+
+  <div class="hero">
+    <h1>買中古屋，<br>帶看前該查完的 6 件事</h1>
+    <p>房子最怕的不是舊，是肉眼看不出來的問題。看不到，不代表查不到——每一項都有公開管道、有文件、有人可以問。這是我接每一間房子都會做的功課，你拿去問任何房仲都問得出來。</p>
+  </div>
+
+  <div class="sticky">
+    <div class="prog"><span id="cnt">已查 0 / 0</span><div class="bar"><i id="bar"></i></div><button onclick="resetAll()">全部清掉</button></div>
+  </div>
+
+  <section class="card">
+    <div class="num">01</div>
+    <h2>先看屋齡，一分鐘決定要多問幾句</h2>
+    <p class="lead">建物謄本上有「建築完成日期」。填進來，馬上知道落在哪個要注意的年份。</p>
+    <div class="yr">
+      <div class="seg" id="era"><button data-v="roc" class="on">民國</button><button data-v="ad">西元</button></div>
+      <div class="inp"><input id="year" type="number" inputmode="numeric" placeholder="例如 82"><span>年完工</span></div>
+    </div>
+    <div class="tl" id="tl">
+      <div class="z sea" style="left:30%;width:11.67%"></div>
+      <div class="z rad" style="left:18.33%;width:5%"></div>
+      <div class="z new" style="left:50%;width:50%"></div>
+    </div>
+    <div class="tlx"><span>民國 60</span><span>70</span><span>80</span><span>90</span><span>100</span><span>110</span><span>120</span></div>
+    <div class="legend">
+      <span><i style="background:var(--z-rad)"></i>輻射屋案例集中（民國 71～73）</span>
+      <span><i style="background:var(--z-sea)"></i>海砂屋案例集中（約民國 70 年代末～80 年代初）</span>
+      <span><i style="background:var(--z-new)"></i>921 後新耐震規範（約民國 90 年後建照）</span>
+    </div>
+    <div class="yrout" id="yrout"></div>
+    <label class="chk"><input type="checkbox" data-k="1a"><span>拿到建物謄本，確認建築完成日期</span></label>
+    <label class="chk"><input type="checkbox" data-k="1b"><span>落在紅／黃色區間的：查過輻射屋、海砂屋（高氯離子）的公開名單</span></label>
+    <div class="tip">屋齡是第一道篩子，不是判決書。同一年蓋的房子也有很紮實的——屋齡只決定你要不要多問，不決定能不能買。</div>
+  </section>
+
+  <section class="card">
+    <div class="num">02</div>
+    <h2>謄本要調兩份：建物＋土地</h2>
+    <p class="lead">很多人只看坪數和價格。真正決定「能不能順利過戶」的，是謄本上的權利部。</p>
+    <label class="chk"><input type="checkbox" data-k="2a"><span>所有權人是不是跟你談的那個人？有沒有共有人沒出面？</span></label>
+    <label class="chk"><input type="checkbox" data-k="2b"><span>有沒有查封、假扣押、預告登記？有的話，風險完全不一樣</span></label>
+    <label class="chk"><input type="checkbox" data-k="2c"><span>抵押權設定多少？（常見是貸款金額的 1.2 倍，可以反推屋主還欠多少）</span></label>
+    <label class="chk"><input type="checkbox" data-k="2d"><span>坪數怎麼組成：主建物、附屬建物、公設各多少，車位有沒有算在裡面</span></label>
+    <div class="tip">「30 坪」不一定是 30 坪。扣掉公設和車位，兩間一樣 30 坪的房子，真正能用的空間可能差到 5 坪以上。</div>
+  </section>
+
+  <section class="card">
+    <div class="num">03</div>
+    <h2>不動產說明書逐欄看，這是法律給你的保護</h2>
+    <p class="lead">這些都是法定要寫的項目，賣方有據實說明的義務，寫不實要負責。它不是形式，是你手上最有力的一份文件。</p>
+    <label class="chk"><input type="checkbox" data-k="3a"><span>有沒有發生過兇殺、自殺或意外死亡</span></label>
+    <label class="chk"><input type="checkbox" data-k="3b"><span>是不是海砂屋、輻射屋，有沒有做過檢測</span></label>
+    <label class="chk"><input type="checkbox" data-k="3c"><span>有沒有漏水、修過沒有、什麼時候修的</span></label>
+    <label class="chk"><input type="checkbox" data-k="3d"><span>有沒有增建、違建、頂樓加蓋、夾層</span></label>
+    <label class="chk"><input type="checkbox" data-k="3e"><span>現況跟謄本、使用執照對不對得起來</span></label>
+    <div class="say"><b>你可以直接這樣問</b>「這間的不動產說明書，可以先給我看嗎？」——房仲敢不敢第一時間拿出來，就看得出他有沒有做功課。</div>
+  </section>
+
+  <section class="card">
+    <div class="num">04</div>
+    <h2>漏水和淹水，要用「問」的</h2>
+    <p class="lead">剛粉刷、開過除濕機的房子，站在裡面什麼都聞不出來。但紀錄騙不了人。</p>
+    <label class="chk"><input type="checkbox" data-k="4a"><span>管委會有沒有這一戶的漏水、滲水報修紀錄</span></label>
+    <label class="chk"><input type="checkbox" data-k="4b"><span>樓上樓下最近有沒有裝修，或有過漏水糾紛</span></label>
+    <label class="chk"><input type="checkbox" data-k="4c"><span>外牆、頂樓防水做過沒有？哪一年做的？</span></label>
+    <label class="chk"><input type="checkbox" data-k="4d"><span>天花板、牆面有沒有「只有一塊特別新」的油漆</span></label>
+    <label class="chk"><input type="checkbox" data-k="4e"><span>颱風、豪雨時，地下室、車道、一樓有沒有淹過水</span></label>
+    <div class="tip">新漆蓋舊痕是最常見的手法。整間都有歲月感、偏偏一面牆特別乾淨，那面牆就是要問的地方。高雄夏天午後雷陣雨多，低窪路段的地下室車位，一定要問淹水紀錄。</div>
+  </section>
+
+  <section class="card">
+    <div class="num">05</div>
+    <h2>管委會的帳，比房子本身更常被忽略</h2>
+    <p class="lead">你買的不只是那一戶，還有這棟樓接下來要花的錢——這筆錢不會寫在售價裡。</p>
+    <label class="chk"><input type="checkbox" data-k="5a"><span>管理費每坪多少？前屋主有沒有欠繳？（欠繳會跟著房子走）</span></label>
+    <label class="chk"><input type="checkbox" data-k="5b"><span>公共基金（修繕基金）還剩多少</span></label>
+    <label class="chk"><input type="checkbox" data-k="5c"><span>近兩年區權會有沒有通過大修：外牆拉皮、電梯汰換、管線更新</span></label>
+    <label class="chk"><input type="checkbox" data-k="5d"><span>社區有沒有正在打的官司或糾紛</span></label>
+    <div class="tip">一次外牆拉皮攤下來，一戶十幾萬跑不掉。買之前不知道，就是你來付。</div>
+  </section>
+
+  <section class="card">
+    <div class="num">06</div>
+    <h2>便宜，要問得出「為什麼」</h2>
+    <p class="lead">便宜不是問題，問不出為什麼便宜才是問題。把同社區近一年的實價登錄攤開比，差距自己會說話。</p>
+    <label class="chk"><input type="checkbox" data-k="6a"><span>同社區、同一棟近一年的成交，扣掉車位後每坪多少</span></label>
+    <label class="chk"><input type="checkbox" data-k="6b"><span>這間跟那些成交差在哪：樓層、座向、格局、屋況</span></label>
+    <label class="chk"><input type="checkbox" data-k="6c"><span>車位一定拆開算——混在一起比，就是比假的</span></label>
+    <label class="chk"><input type="checkbox" data-k="6d"><span>價差太大時，賣方講不講得出原因</span></label>
+    <div class="say"><b>你可以直接這樣問</b>「這間比同社區便宜這麼多，是屋主急著賣，還是有什麼我還不知道的？」——問得出答案的便宜可以買，問不出答案的，先不要碰。</div>
+  </section>
+
+  <div class="card cta">
+    <p>手上已經有在看的物件？把地址或 591 連結傳給我，<br>這 6 件事我查完再跟你講結果。</p>
+    <div class="btns">
+      <a class="btn line" href="https://line.me/R/ti/p/@530myzmv" target="_blank" rel="noopener">加 LINE 問邱姐</a>
+      <a class="btn tel" href="tel:0921203586">打電話給邱姐</a>
+    </div>
+  </div>
+
+  <footer><a href="/tools" style="color:inherit;font-size:.9rem;font-weight:700">← 看其他買房試算工具</a><br><br>
+    本清單為一般查核流程整理，供買方自我檢核。年份區間為市場常見的風險參考，<br>個案以主管機關公開資料與該物件不動產說明書為準；涉及法律、稅務、工程爭議請洽專業人士。<br>
+    勾選紀錄只存在你自己的手機／電腦。｜版本：2026-09<br>© 2026 高雄房仲邱姐／邱靜慧
+  </footer>
+</div>
+
+<script>
+const KEY = 'qj-check6';
+const boxes = [...document.querySelectorAll('.chk input')];
+let saved = {};
+try { saved = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) {}
+boxes.forEach(b => {
+  b.checked = !!saved[b.dataset.k];
+  b.addEventListener('change', () => { saved[b.dataset.k] = b.checked; try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} paint(); });
+});
+function paint(){
+  const n = boxes.filter(b => b.checked).length;
+  document.getElementById('cnt').textContent = `已查 ${n} / ${boxes.length}`;
+  document.getElementById('bar').style.width = (n / boxes.length * 100) + '%';
+  boxes.forEach(b => b.closest('.chk').classList.toggle('done', b.checked));
+}
+function resetAll(){
+  if (!confirm('確定要把勾選全部清掉？')) return;
+  boxes.forEach(b => b.checked = false); saved = {};
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  paint();
+}
+paint();
+
+/* 屋齡對照：時間軸 民國 60～120 */
+const MIN = 60, MAX = 120;
+let era = 'roc';
+document.querySelectorAll('#era button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#era button').forEach(x => x.classList.toggle('on', x === b));
+  era = b.dataset.v;
+  document.getElementById('year').placeholder = era === 'roc' ? '例如 82' : '例如 1993';
+  yearCheck();
+});
+document.getElementById('year').addEventListener('input', yearCheck);
+function yearCheck(){
+  const raw = parseInt(document.getElementById('year').value);
+  const out = document.getElementById('yrout');
+  document.querySelectorAll('#tl .pin').forEach(p => p.remove());
+  if (isNaN(raw)){ out.innerHTML = ''; return; }
+  const roc = era === 'ad' ? raw - 1911 : raw;
+  if (roc < 30 || roc > 120){ out.innerHTML = `<div class="verdict warn">年份好像不太對，${era === 'roc' ? '民國' : '西元'}年請再確認一次。</div>`; return; }
+  const age = 115 - roc;
+  const pin = document.createElement('div');
+  pin.className = 'pin';
+  pin.style.left = Math.max(0, Math.min(100, (roc - MIN) / (MAX - MIN) * 100)) + '%';
+  pin.textContent = '民國 ' + roc;
+  document.getElementById('tl').appendChild(pin);
+  let msg, cls = 'warn';
+  if (roc >= 71 && roc <= 73) msg = `屋齡約 ${age} 年，落在<b>輻射屋案例最集中</b>的年份。主管機關有公開的輻射屋查詢，第 3 項的不動產說明書也要看仔細。`;
+  else if (roc >= 78 && roc <= 84) msg = `屋齡約 ${age} 年，落在<b>海砂屋案例最集中</b>的那波搶建期。問清楚有沒有做過氯離子檢測，也查一下公開的高氯離子建物名單。`;
+  else if (roc >= 70 && roc <= 77) msg = `屋齡約 ${age} 年，接近輻射屋、海砂屋案例較多的年份，第 3 項的不動產說明書要多看幾眼。`;
+  else if (roc >= 90) { msg = `屋齡約 ${age} 年，大多是 921 之後新耐震規範的建照。屋齡這關相對單純，但漏水、管委會的帳、行情比對一樣要做。`; cls = 'ok'; }
+  else msg = `屋齡約 ${age} 年，沒落在特別集中的年份，但屋齡偏高，管線、防水、電梯通常都到了要換的時候，第 4、5 項要多問。`;
+  out.innerHTML = `<div class="verdict ${cls}">${msg}</div>`;
+}
+</script>
+</body>
+</html>

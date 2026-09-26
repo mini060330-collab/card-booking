@@ -53,6 +53,8 @@ const TOOLS = [
   { href: "/tools/qingan", name: "青安 3.0 資格檢測", text: "7 題測你符不符合、最多能貸多少、每月繳多少。9/18 起第 2 戶可貸 7 成也一起算。" },
   { href: "/tools/afford", name: "我買得起多少", text: "輸入月收入和手上現金，算出你在高雄買得起多少錢的房子。" },
   { href: "/tools/fees", name: "買房雜費一次算", text: "頭期款之外，契稅、代書、仲介費、搬家，還要準備多少現金。" },
+  { href: "/tools/grace", name: "寬限期到期試算", text: "只繳利息的日子結束後，月付會跳多少？續繳、轉貸、盤點資產三條路一次比。" },
+  { href: "/tools/check", name: "中古屋查核清單", text: "帶看前該查完的 6 件事：屋齡、謄本、說明書、漏水淹水、管委會、行情。邊看邊勾。" },
 ];
 
 const JSON_LD = {
