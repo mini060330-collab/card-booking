@@ -38,8 +38,18 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
   const file = FILES[slug];
   if (!file) return new NextResponse("Not found", { status: 404 });
 
-  const html = await readFile(path.join(process.cwd(), "src/private-tools", file), "utf8");
-  const body = html.replace(/<body([^>]*)>/i, (m) => m + BAR);
+  let body = await readFile(path.join(process.cwd(), "src/private-tools", file), "utf8");
+  // 舊版頁面（例如屋主實拿）沒寫手機顯示設定，補上，不然手機上字會縮很小
+  if (!/name=["']viewport["']/i.test(body)) {
+    body = `<meta name="viewport" content="width=device-width, initial-scale=1">\n` + body;
+  }
+  // 有 <body> 就插在它後面；沒有就插在最後一個 </style> 後面（瀏覽器會自動當成內文開頭）
+  if (/<body[^>]*>/i.test(body)) {
+    body = body.replace(/<body([^>]*)>/i, (m) => m + BAR);
+  } else {
+    const i = body.lastIndexOf("</style>");
+    body = i >= 0 ? body.slice(0, i + 8) + BAR + body.slice(i + 8) : BAR + body;
+  }
   return new NextResponse(body, {
     headers: {
       "content-type": "text/html; charset=utf-8",
