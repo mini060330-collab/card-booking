@@ -1,0 +1,522 @@
+<title>屋主實拿試算</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700&display=swap">
+
+<style>
+  :root {
+    --bg:#F4F6F8; --grid:#DDE3EA; --surface:#FFFFFF; --line:#DCE2E9; --line-soft:#EAEEF3;
+    --ink:#16202E; --ink-mid:#45566B; --ink-soft:#6E7F93;
+    --accent:#1F5F8B; --accent-bg:#E7EFF6;
+    --flag:#9A5B12; --flag-bg:#F7EEE0;
+    --minus:#8C3A2B; --plus:#2F6B4F;
+    --radius:3px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:#0F141B; --grid:#1B232E; --surface:#161D26; --line:#27313D; --line-soft:#1E2732;
+      --ink:#E4EAF1; --ink-mid:#A9B7C7; --ink-soft:#7E8EA1;
+      --accent:#78AED9; --accent-bg:#17293A;
+      --flag:#D9A566; --flag-bg:#2A2114;
+      --minus:#E09383; --plus:#7DBF9F;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:#0F141B; --grid:#1B232E; --surface:#161D26; --line:#27313D; --line-soft:#1E2732;
+    --ink:#E4EAF1; --ink-mid:#A9B7C7; --ink-soft:#7E8EA1;
+    --accent:#78AED9; --accent-bg:#17293A;
+    --flag:#D9A566; --flag-bg:#2A2114;
+    --minus:#E09383; --plus:#7DBF9F;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; padding:0 1.1rem 4rem; background:var(--bg); color:var(--ink);
+    font-family:"Noto Sans TC","Microsoft JhengHei",sans-serif; font-size:16px; line-height:1.75;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:46rem; margin:0 auto; }
+  header.cover {
+    margin:0 -1.1rem 2rem; padding:2.75rem 1.1rem 2rem; border-bottom:1px solid var(--line);
+    background-color:var(--bg);
+    background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:28px 28px;
+  }
+  .eyebrow { font-size:.72rem; letter-spacing:.18em; color:var(--accent); font-weight:500; }
+  h1 { font-family:"Noto Serif TC",serif; font-size:clamp(1.7rem,5vw,2.4rem); margin:.3rem 0 .5rem; line-height:1.25; }
+  .lede { color:var(--ink-mid); margin:0; font-size:.95rem; }
+  h2 { font-family:"Noto Serif TC",serif; font-size:1.15rem; margin:0 0 .2rem; }
+  .hint { color:var(--ink-soft); font-size:.85rem; margin:0; }
+
+  section { margin-bottom:2rem; }
+  .card {
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:1.4rem 1.3rem; display:flex; flex-direction:column; gap:1.1rem;
+  }
+  .fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(13rem,1fr)); gap:1rem 1.2rem; }
+  .f { display:flex; flex-direction:column; gap:.3rem; }
+  .f label { font-size:.85rem; font-weight:500; }
+  .f .sub { font-size:.76rem; color:var(--ink-soft); line-height:1.5; }
+  input[type="number"], input[type="month"], select {
+    font:inherit; font-size:1rem; padding:.55rem .7rem; border:1px solid var(--line);
+    border-radius:var(--radius); background:var(--bg); color:var(--ink); width:100%;
+    font-variant-numeric:tabular-nums;
+  }
+  input:focus-visible, select:focus-visible, button:focus-visible {
+    outline:2px solid var(--accent); outline-offset:1px;
+  }
+  .check { display:flex; gap:.6rem; align-items:flex-start; }
+  .check input { margin-top:.45rem; width:1rem; height:1rem; accent-color:var(--accent); flex:none; }
+
+  .out { display:flex; flex-direction:column; gap:0; font-variant-numeric:tabular-nums; }
+  .r { display:grid; grid-template-columns:1fr auto; gap:.5rem 1rem; padding:.5rem 0; border-bottom:1px solid var(--line-soft); align-items:baseline; }
+  .r .k { font-size:.92rem; }
+  .r .k small { display:block; color:var(--ink-soft); font-size:.76rem; line-height:1.45; }
+  .r .v { font-weight:500; white-space:nowrap; }
+  .r.neg .v { color:var(--minus); }
+  .r.head { border-bottom:1px solid var(--line); }
+  .r.sub { background:var(--line-soft); padding-left:.6rem; padding-right:.6rem; margin:.2rem -.6rem 0; }
+  .r.sub .k { font-weight:500; }
+  .r.sub .v { color:var(--minus); font-weight:700; }
+  .r.head .k { font-size:.78rem; letter-spacing:.1em; color:var(--ink-soft); font-weight:700; padding-top:.6rem; }
+  .r.total { border-bottom:none; border-top:2px solid var(--ink); margin-top:.4rem; padding-top:.9rem; }
+  .r.total .k { font-family:"Noto Serif TC",serif; font-size:1.1rem; font-weight:700; }
+  .r.total .v { font-size:1.5rem; font-weight:700; color:var(--plus); }
+  .r.total.bad .v { color:var(--minus); }
+  .band { color:var(--ink-soft); font-size:.85rem; text-align:right; padding-top:.3rem; }
+
+  .flag { background:var(--flag-bg); border:1px solid var(--flag); border-radius:var(--radius); padding:1rem 1.1rem; color:var(--ink); font-size:.9rem; }
+  .flag strong { color:var(--flag); }
+  .flag ul { margin:.5rem 0 0; padding-left:1.2rem; }
+  .stamp { font-size:.78rem; color:var(--ink-soft); border-top:1px solid var(--line); padding-top:.9rem; margin-top:.3rem; }
+  .money { font-size:.8rem; color:var(--ink-soft); min-height:1.2em; }
+  footer { color:var(--ink-soft); font-size:.82rem; border-top:1px solid var(--line); padding-top:1rem; }
+
+  /* ── 內部版 / 客戶版切換 ───────────────── */
+  .switch { display:flex; gap:.4rem; align-items:center; margin-top:1.1rem; flex-wrap:wrap; }
+  .switch .lab { font-size:.76rem; letter-spacing:.1em; color:var(--ink-soft); font-weight:700; margin-right:.3rem; }
+  .switch button {
+    font:inherit; font-size:.85rem; padding:.35rem .9rem; cursor:pointer;
+    border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--surface); color:var(--ink-mid);
+  }
+  .switch button[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:#fff; font-weight:500; }
+  :root[data-theme="dark"] .switch button[aria-pressed="true"],
+  .switch button[aria-pressed="true"] { color:#fff; }
+  .client-only { display:none; }
+  body[data-view="client"] .internal-only { display:none; }
+  body[data-view="client"] .client-only { display:block; }
+  body[data-view="client"] .fields.client-simple .adv { display:none; }
+  .cta {
+    background:var(--accent-bg); border:1px solid var(--accent); border-radius:var(--radius);
+    padding:1.2rem 1.2rem; color:var(--ink);
+  }
+  .cta strong { color:var(--accent); font-size:1.05rem; display:block; margin-bottom:.35rem; }
+  .key-field {
+    background:var(--accent-bg); border:2px solid var(--accent);
+    border-radius:var(--radius); padding:.9rem 1rem;
+  }
+  .key-field label { font-size:.95rem; font-weight:700; }
+  .todo-note {
+    border:1px dashed var(--flag); border-radius:var(--radius); padding:.7rem .9rem;
+    font-size:.82rem; color:var(--flag); margin-top:.8rem;
+  }
+  @media (max-width:30rem){ .r .v { font-size:.95rem; } .r.total .v { font-size:1.25rem; } }
+
+  /* 列印：只留「屋主的狀況＋實拿表」，操作用的按鈕、滑桿、內部提醒一律不印。
+     邱姐第一次列印時印出 3 頁全是操作說明，代書看了會抓不到重點。 */
+  @media print {
+    body { padding:0; font-size:11pt; background:#fff; color:#000; }
+    header.cover { background:none; border-bottom:2px solid #000; padding:0 0 1rem; margin:0 0 1.5rem; }
+    .switch, .flag, #landEstBox, .cta, .todo-note, input[type="range"] { display:none !important; }
+    .f .sub { display:none; }
+    .card { border:none; padding:0; }
+    section { margin-bottom:1.2rem; break-inside:avoid; }
+    input, select { border:none; padding:0; background:none; font-weight:700; }
+    .stamp { border-top:1px solid #000; }
+  }
+</style>
+
+<header class="cover">
+  <div class="wrap">
+    <span class="eyebrow" id="eyebrow">邱姐 AI 房仲工作室・內部試用版</span>
+    <h1>屋主實拿試算</h1>
+    <p class="lede" id="lede">填四、五格數字，直接看到「賣掉之後能拿回家多少」。數字一改，下面同步跟著算。</p>
+    <div class="switch">
+      <span class="lab">現在看的是</span>
+      <button type="button" id="btnInternal" aria-pressed="true">內部版（邱姐自己用）</button>
+      <button type="button" id="btnClient" aria-pressed="false">客戶會看到的版本</button>
+      <button type="button" id="btnClear" style="margin-left:auto">清空重填</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="card">
+    <div>
+      <h2>屋主的狀況</h2>
+      <p class="hint">金額單位一律是「萬元」，直接打數字就好。</p>
+    </div>
+
+    <div class="fields client-simple">
+      <div class="f">
+        <label for="price">成交價（萬）</label>
+        <input type="number" id="price" value="2000" min="0" step="10" inputmode="decimal">
+        <span class="sub money" id="priceWords"></span>
+      </div>
+      <div class="f">
+        <label for="cost">當初買入價（萬）</label>
+        <input type="number" id="cost" value="1400" min="0" step="10" inputmode="decimal">
+        <span class="sub">不知道就填成交價的七、八成先抓個大概</span>
+      </div>
+      <div class="f">
+        <label for="buyYear">什麼時候買的</label>
+        <!-- 原本用 <input type="month">，年份只能靠小箭頭一年一年按，很難用。
+             改成兩個下拉選單，用選的就好。 -->
+        <div style="display:flex;gap:.5rem">
+          <select id="buyYear" style="flex:2"></select>
+          <select id="buyMonth" style="flex:1"></select>
+        </div>
+        <span class="sub" id="holdInfo">—</span>
+      </div>
+      <div class="f">
+        <label for="loan">房貸還剩多少（萬）</label>
+        <input type="number" id="loan" value="850" min="0" step="10" inputmode="decimal">
+        <span class="sub">沒有貸款就填 0</span>
+      </div>
+      <div class="f adv">
+        <label for="oldFee">當初買入的相關費用（萬）</label>
+        <input type="number" id="oldFee" value="0" min="0" step="1" inputmode="decimal">
+        <span class="sub">契稅、代書、仲介、裝潢，<strong>有單據才能算</strong>；沒有就留 0</span>
+      </div>
+      <div class="f adv">
+        <label for="feeRate">仲介服務費（%）</label>
+        <input type="number" id="feeRate" value="4" min="0" max="6" step="0.1" inputmode="decimal">
+        <span class="sub">法規上限：買賣雙方合計 6%</span>
+      </div>
+    </div>
+
+    <div class="check">
+      <input type="checkbox" id="selfUse">
+      <label for="selfUse">
+        <strong>符合自住優惠</strong>
+        <span class="sub">本人、配偶或未成年子女<strong>設籍且實際居住連續滿 6 年</strong>，期間沒有出租或營業，而且 6 年內沒用過這個優惠。<br>符合的話：獲利 400 萬以內免稅，超過的部分只課 10%。</span>
+      </label>
+    </div>
+
+    <div class="f internal-only">
+      <label for="landAmount">土地增值稅實際金額（萬）　<span style="color:var(--accent)">← 有填就用這個</span></label>
+      <input type="number" id="landAmount" value="" min="0" step="1" inputmode="decimal" placeholder="不知道就留白">
+      <span class="sub">數字哪裡來：① 調土地登記謄本後請代書算　② 高雄市稅捐稽徵處的線上試算　③ 屋主自己申報過的舊資料。</span>
+      <span class="sub" id="landHint"></span>
+    </div>
+
+    <div class="f internal-only key-field">
+      <label for="landGainInput">⭐ 土地漲價總數額（萬）　<span style="color:var(--accent)">← 這格才會真的改變實拿</span></label>
+      <input type="number" id="landGainInput" value="" min="0" step="1" inputmode="decimal" placeholder="不知道就留白，系統會反推">
+      <span class="sub">這個數字在土增稅試算單／謄本上就有。<strong>房地合一的課稅所得要扣掉它</strong>，所以它比土增稅金額本身還重要。<br>
+      留白的話系統用「土增稅 ÷ 稅率」反推——但土增稅是累進的（20/30/40%），反推會失真，<strong>誤差可能到幾十萬</strong>。</span>
+    </div>
+
+    <div class="f internal-only" id="landEstBox">
+      <label for="landRate">留白時才用：抓成交價的 <span id="landRateShow">1.5</span>%</label>
+      <input type="range" id="landRate" value="1.5" min="0.2" max="4" step="0.1" style="width:100%;accent-color:var(--accent)">
+      <span class="sub">⚠️ 土增稅要調謄本才算得準（要前次移轉現值、物價指數）。這裡是<strong>用經驗比例粗估</strong>。等邱姐把各行政區的實際比例填進來，這一格才會準。</span>
+    </div>
+
+
+  </section>
+
+  <section class="card" id="blockCard" hidden>
+    <div class="flag">
+      <strong>⚠️ 這種情況不要用這張表算</strong>
+      <div id="blockWhy"></div>
+      <p style="margin:.6rem 0 0">硬算會錯，直接跟屋主說「這個要找地政士確認，我幫你約」反而更專業。</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <div>
+      <h2>屋主實拿</h2>
+      <p class="hint" id="modeLine">—</p>
+    </div>
+
+    <div class="out" id="out"></div>
+
+    <div class="stamp">
+      本試算僅供參考，實際稅額以稅捐稽徵機關核定為準。<br>
+      稅率版本：2026-08　試算日期：<span id="today"></span><br>
+      土地增值稅為粗估，實際需調閱土地登記謄本後計算。
+    </div>
+  </section>
+
+  <section class="card client-only">
+    <div class="cta">
+      <strong>算出來的數字比你想的少嗎？</strong>
+      稅是可以規劃的——設籍、賣的時間點、費用單據，差一項就差幾十萬。
+      要不要我幫你看一下你這間實際上能怎麼安排？
+      <div class="todo-note">⚠️ 這句 CTA 是我先寫的暫代版，<strong>上線前請邱姐用自己的話改掉</strong>——這句要像人講的，不能有廣告腔。</div>
+    </div>
+  </section>
+
+  <section class="card internal-only">
+    <div class="flag">
+      <strong>上線前還沒完成的事</strong>
+      <ul>
+        <li>稅率表裡每個數字都還沒逐項核對（房地合一級距、自住 400 萬條件、土增稅累進與長期持有減徵）</li>
+        <li>各行政區的土增稅經驗比例還沒填，現在滑桿是通用值</li>
+        <li>代書費、履保費用的是初版預設值（代書 1.5 萬、履保萬分之 6 的一半、塗銷 1 千）</li>
+      </ul>
+      <p style="margin:.6rem 0 0">在這些對完之前，<strong>這頁自己看、拿給地政士對，先不要給客戶看。</strong></p>
+    </div>
+  </section>
+
+  <footer>邱姐 AI 房仲工作室｜屋主實拿試算　內部試用版 2026-08-24</footer>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var W = 10000; // 一萬元
+
+  function fmt(n) { return Math.round(n).toLocaleString("zh-TW"); }
+  function wan(n) {  // 元 → 「約 X 萬」
+    var w = n / W;
+    if (Math.abs(w) >= 10000) return "約 " + (w / 10000).toFixed(2) + " 億";
+    return "約 " + fmt(w) + " 萬";
+  }
+  function num(id) { var v = parseFloat($(id).value); return isFinite(v) ? v : 0; }
+
+  function holdYears() {
+    var y = Number($("buyYear").value);
+    var m = Number($("buyMonth").value);
+    if (!y || !m) return null;
+    var buy = new Date(y, m - 1, 1);
+    if (!isFinite(buy.getTime())) return null;
+    return { years: (Date.now() - buy.getTime()) / (365.25 * 86400000), date: buy };
+  }
+
+  // 年份選單：民國式的西元年，從今年往回列 45 年（1981 年以前的案子極少，真的有再手動改）。
+  (function buildDateSelects() {
+    var thisYear = new Date().getFullYear();
+    var ys = "";
+    for (var y = thisYear; y >= thisYear - 45; y--) {
+      ys += '<option value="' + y + '">' + y + " 年（民國 " + (y - 1911) + " 年）</option>";
+    }
+    $("buyYear").innerHTML = ys;
+    var ms = "";
+    for (var m = 1; m <= 12; m++) ms += '<option value="' + m + '">' + m + " 月</option>";
+    $("buyMonth").innerHTML = ms;
+    $("buyYear").value = String(Math.min(2018, thisYear));
+    $("buyMonth").value = "6";
+  })();
+
+  // 房地合一新制稅率（個人，境內居住者）—— 2026-08 版，未核對
+  function rate(y) {
+    if (y < 2) return 0.45;
+    if (y < 5) return 0.35;
+    if (y < 10) return 0.20;
+    return 0.15;
+  }
+
+  function calc() {
+    var price = num("price") * W;
+    var cost = num("cost") * W;
+    var oldFee = num("oldFee") * W;
+    var loan = num("loan") * W;
+    var feeRate = num("feeRate") / 100;
+    var selfUse = $("selfUse").checked;
+    var landPct = num("landRate") / 100;
+
+    $("landRateShow").textContent = num("landRate").toFixed(1);
+    $("priceWords").textContent = price ? wan(price).replace("約 ", "＝ ") + "元" : "";
+
+    var h = holdYears();
+    var y = h ? h.years : 0;
+
+    // 舊制 / 持有期間顯示
+    var oldSystem = h && h.date < new Date(2016, 0, 1);
+    $("holdInfo").textContent = h ? "持有約 " + y.toFixed(1) + " 年" + (oldSystem ? "（104 年前取得＝舊制）" : "") : "—";
+
+    $("blockCard").hidden = !oldSystem;
+    if (oldSystem) {
+      $("blockWhy").innerHTML = "取得日在 <strong>104/12/31 以前</strong>，屬於舊制（財產交易所得，併入綜合所得稅），算法完全不同，這張表算出來的房地合一稅不適用。";
+    }
+
+    // ── 費用
+    var agentFee = price * feeRate;
+    var deedFee = 15000;      // 代書費（土增稅申報＋實價登錄）
+    var escrow = price * 0.0006 / 2; // 履約保證費，雙方各半
+    var release = loan > 0 ? 1000 : 0; // 塗銷抵押權登記
+    var sellFees = agentFee + deedFee + escrow + release;
+
+    // ── 土地增值稅
+    //   est   = 還沒調謄本，用「成交價 × 經驗比例」粗估
+    //   exact = 已知實際金額，直接用（此時整張表算精算，不再給區間）
+    // 規則只有一條：實際金額有填（>0）就用它，留白才用比例估。
+    // 不再做模式切換 —— 兩個欄位都看得到、卻只有一個算數，會讓人以為系統壞掉。
+    var landRaw = $("landAmount").value.trim();
+    var exactLand = landRaw !== "" && num("landAmount") > 0;
+    $("landEstBox").style.opacity = exactLand ? "0.45" : "1";
+    var landTaxRate = selfUse ? 0.10 : 0.20;
+    var landTax = exactLand ? num("landAmount") * W : price * landPct;
+    // 土地漲價總數額：有填就用填的（準）；留白才用「土增稅 ÷ 稅率」反推（會失真，因為土增稅是累進的）。
+    var gainRaw = $("landGainInput").value.trim();
+    var exactGain = gainRaw !== "" && num("landGainInput") > 0;
+    var landGain = exactGain ? num("landGainInput") * W : landTax / landTaxRate;
+
+    // ── 房地合一（新制）
+    var taxable = price - cost - oldFee - sellFees - landGain;
+    if (taxable < 0) taxable = 0;
+    var r, gainTax, taxNote;
+    if (selfUse && y >= 6) {
+      var after = Math.max(0, taxable - 4000000);
+      gainTax = after * 0.10;
+      r = 0.10;
+      taxNote = "自住優惠：獲利 400 萬免稅，超過的部分 10%";
+    } else {
+      r = rate(y);
+      gainTax = taxable * r;
+      taxNote = "持有約 " + y.toFixed(1) + " 年 → 稅率 " + Math.round(r * 100) + "%";
+    }
+    if (oldSystem) { gainTax = 0; taxNote = "舊制，這裡不計算"; }
+
+    var net = price - landTax - gainTax - sellFees - loan;
+
+    // ── 區間：土增稅估 ±30%，連帶影響房地合一
+    function netAt(mult) {
+      var lt = landTax * mult;
+      var lg = exactGain ? landGain : lt / landTaxRate;
+      var tb = Math.max(0, price - cost - oldFee - sellFees - lg);
+      var gt = oldSystem ? 0 : (selfUse && y >= 6 ? Math.max(0, tb - 4000000) * 0.10 : tb * rate(y));
+      return price - lt - gt - sellFees - loan;
+    }
+    var hi = netAt(0.7), lo = netAt(1.3);
+
+    var rows = [
+      ["head", "成交總價", fmt(price)],
+      ["", "&nbsp;", ""],
+      ["head", "要繳的稅", ""],
+      ["neg", "土地增值稅<small>" + (exactLand ? "實際金額（已調謄本／代書試算）" : "粗估：成交價的 " + num("landRate").toFixed(1) + "%，" + (selfUse ? "自用住宅 10%" : "一般用地")) + "</small>", "−" + fmt(landTax)],
+      ["neg", "房地合一稅<small>" + taxNote + "；土地漲價總數額 " + fmt(landGain / W) + " 萬（" + (exactGain ? "已填實際值" : "⚠️ 由土增稅反推，可能失真") + "）</small>", "−" + fmt(gainTax)],
+      ["sub", "兩項稅合計<small>土增稅與房地合一是連動的：土增稅多繳，房地合一就少繳</small>", "−" + fmt(landTax + gainTax)],
+      ["head", "要付的費用", ""],
+      ["neg", "仲介服務費 " + num("feeRate") + "%", "−" + fmt(agentFee)],
+      ["neg", "代書費<small>土增稅申報、實價登錄</small>", "−" + fmt(deedFee)],
+      ["neg", "履約保證費<small>買賣雙方各半</small>", "−" + fmt(escrow)],
+    ];
+    if (release) rows.push(["neg", "塗銷抵押權登記", "−" + fmt(release)]);
+    if (loan) {
+      rows.push(["head", "要還的錢", ""]);
+      rows.push(["neg", "房貸剩餘本金", "−" + fmt(loan)]);
+    }
+
+    var html = rows.map(function (row) {
+      if (row[0] === "head") return '<div class="r head"><span class="k">' + row[1] + '</span><span class="v">' + row[2] + '</span></div>';
+      return '<div class="r ' + row[0] + '"><span class="k">' + row[1] + '</span><span class="v">' + row[2] + '</span></div>';
+    }).join("");
+
+    html += '<div class="r total' + (net < 0 ? " bad" : "") + '"><span class="k">屋主實拿</span><span class="v">' + fmt(net) + '</span></div>';
+    html += '<div class="band">' + wan(net) + '元　・　佔成交價 ' + (price ? (net / price * 100).toFixed(1) : "0") + '%</div>';
+    // 土增稅估高估低，對實拿的影響有時會被房地合一抵銷掉（多繳的土增稅＝土地漲價總數額，
+    // 會從房地合一的課稅所得裡扣掉）。兩邊稅率剛好相同時完全抵銷，此時給區間反而誤導。
+    if (exactLand && exactGain) {
+      html += '<div class="band">土增稅與土地漲價總數額都是實際值，這張表已經是<strong>精算</strong>。</div>';
+    } else if (exactLand) {
+      html += '<div class="band"><strong style="color:var(--flag)">⚠️ 還不是精算</strong>：土增稅雖然是實際金額，但土地漲價總數額仍由系統反推，房地合一可能失真。請補填「土地漲價總數額」。</div>';
+    } else if (Math.abs(hi - lo) < Math.max(50000, Math.abs(net) * 0.01)) {
+      html += '<div class="band">土增稅估高估低，對實拿幾乎沒差 —— 多繳的土增稅會從房地合一的課稅所得裡扣掉，兩邊互相抵銷。<strong>這個案子的實拿數字比一般情況可靠。</strong></div>';
+    } else {
+      html += '<div class="band">土增稅抓寬一點的話，落在 <strong>' + wan(lo) + '</strong> ～ <strong>' + wan(hi) + '</strong> 之間</div>';
+    }
+
+    $("landHint").innerHTML = exactGain
+      ? '✅ 已填土地漲價總數額，土增稅金額會實際影響實拿。'
+      : '<strong style="color:var(--flag)">⚠️ 只改這一格，屋主實拿不會變。</strong>因為系統要拿它反推土地漲價總數額，' +
+        '土增稅多繳多少、房地合一就少繳多少，剛好抵銷。<strong>要讓數字真的動，請填下面的「土地漲價總數額」。</strong>';
+
+    $("out").innerHTML = html;
+    var isClient = document.body.getAttribute("data-view") === "client";
+    $("modeLine").textContent = oldSystem
+      ? (isClient
+          ? "你這間是 104 年以前買的，算法跟現在不同，下面的數字不適用，請往上看提醒"
+          : "⚠️ 舊制案件，下面的房地合一稅沒有算，數字不能給屋主看")
+      : (exactLand && exactGain
+          ? "精算模式：兩個關鍵數字都是實際值，可以拿給屋主看"
+          : exactLand
+            ? "半精算：土增稅是實際金額，但土地漲價總數額仍是反推，還不能拿給屋主看"
+            : (isClient
+              ? "土地增值稅需要調謄本才算得精準，這裡先用行情比例估，所以是概算"
+              : "估算模式：土增稅用經驗比例推，所以最後給的是一個區間"));
+  }
+
+  var FIELDS = ["price", "cost", "buyYear", "buyMonth", "loan", "oldFee", "feeRate", "selfUse", "landRate", "landAmount", "landGainInput"];
+  var STORE = "qiu-seller-net-v1";
+
+  // 重新整理不要把填過的數字清光 —— 存在瀏覽器本機，換電腦不會跟過去，也不會傳到任何地方。
+  function save() {
+    try {
+      var data = {};
+      FIELDS.forEach(function (id) {
+        var el = $(id);
+        data[id] = el.type === "checkbox" ? el.checked : el.value;
+      });
+      localStorage.setItem(STORE, JSON.stringify(data));
+    } catch (e) { /* 隱私模式等情況存不了，忽略即可 */ }
+  }
+  function restore() {
+    try {
+      var raw = localStorage.getItem(STORE);
+      if (!raw) return;
+      var data = JSON.parse(raw);
+      FIELDS.forEach(function (id) {
+        if (!(id in data)) return;
+        var el = $(id);
+        if (el.type === "checkbox") el.checked = !!data[id];
+        else el.value = data[id];
+      });
+    } catch (e) { /* 存壞了就當作沒存過 */ }
+  }
+
+  FIELDS.forEach(function (id) {
+    $(id).addEventListener("input", function () { save(); calc(); });
+    $(id).addEventListener("change", function () { save(); calc(); });
+  });
+
+  $("btnClear").addEventListener("click", function () {
+    try { localStorage.removeItem(STORE); } catch (e) {}
+    location.reload();
+  });
+
+  restore();
+
+  // ── 內部版 / 客戶版切換 ────────────────────────────
+  // 同一份計算，只換「講法」與「露幾格」：
+  //   客戶版＝5 格（成交價、買入價、買入時間、房貸、自住），仲介費率與土增稅比例用預設值不外露。
+  //   內部版＝全部露出來，且多一塊「上線前還沒完成的事」的自我提醒。
+  var VIEW = {
+    internal: {
+      eyebrow: "邱姐 AI 房仲工作室・內部試用版",
+      lede: "填四、五格數字，直接看到「賣掉之後能拿回家多少」。數字一改，下面同步跟著算。",
+    },
+    client: {
+      eyebrow: "高雄房仲 邱姐｜免費試算",
+      lede: "賣房子到底能拿回家多少？填幾個數字，馬上看到扣完稅和費用之後的實拿金額。不用留任何資料。",
+    },
+  };
+  function setView(mode) {
+    document.body.setAttribute("data-view", mode);
+    $("eyebrow").textContent = VIEW[mode].eyebrow;
+    $("lede").textContent = VIEW[mode].lede;
+    $("btnInternal").setAttribute("aria-pressed", String(mode === "internal"));
+    $("btnClient").setAttribute("aria-pressed", String(mode === "client"));
+    calc();
+  }
+  $("btnInternal").addEventListener("click", function () { setView("internal"); });
+  $("btnClient").addEventListener("click", function () { setView("client"); });
+
+  var d = new Date();
+  $("today").textContent = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  setView("internal");
+})();
+</script>

@@ -410,6 +410,21 @@ export default async function AppointmentsAdminPage({
               </a>
             ) : null}
             <a
+              href="/admin/tools"
+              style={{
+                marginLeft: 16,
+                fontSize: 13.5,
+                fontWeight: 700,
+                color: CIS.textMute,
+                textDecoration: "none",
+                border: `1px solid ${CIS.cardBorder}`,
+                borderRadius: 8,
+                padding: "6px 12px",
+              }}
+            >
+              我的工具箱
+            </a>
+            <a
               href="/admin/logout"
               style={{
                 marginLeft: 16,

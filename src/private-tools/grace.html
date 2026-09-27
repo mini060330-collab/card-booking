@@ -160,8 +160,19 @@
       <h2>你手上其實有三條路</h2>
       <p class="muted">沒有標準答案，只有適不適合你。</p>
       <div class="road"><span class="n">1</span><div><b>咬牙續繳</b><div class="d">每月 <span class="money" id="road1">—</span>。收入穩、撐得住，這條最單純，本金開始往下掉，不用付任何額外費用。</div></div></div>
-      <div class="road"><span class="n">2</span><div><b>轉貸重拉年期</b><div class="d">把餘額轉到別家、重新拉 30 年，月付約降到 <span class="money" id="road2">—</span>。但要付規費、代書費，綁約期內還有違約金，總利息也會變多。划不划算要看你的條件，我可以幫你一項一項算。</div></div></div>
+      <div class="road"><span class="n">2</span><div><b>轉貸重拉年期</b><div class="d">把餘額轉到別家、重新拉 30 年，月付約降到 <span class="money" id="road2">—</span>。但要付規費、代書費，綁約期內還有違約金，而且總利息會變多。划不划算，下面幫你算。</div></div></div>
       <div class="road"><span class="n">3</span><div><b>趁機盤點資產</b><div class="d">房子這幾年如果有漲，先搞清楚現在值多少——知道市值，才知道該守、該換、還是該調整。</div></div></div>
+    </div>
+
+    <!-- ④ 轉貸划算嗎 -->
+    <div class="card">
+      <h2>轉貸划不划算？算回本要幾個月</h2>
+      <p class="muted">轉貸不能只看利率差，各種費用加起來，常常吃掉第一年省下的利息。</p>
+      <label class="t">別家開給你的利率</label>
+      <div class="inp"><input id="newRate" type="number" inputmode="decimal" value="2.1" step="0.01" min="0" max="10"><span>%</span></div>
+      <label class="t">現在的貸款還在綁約期內嗎？ <small>（通常撥款後 2～3 年）</small></label>
+      <div class="seg" id="lock"><button data-v="0" class="on">已經過了</button><button data-v="1">還在綁約期</button><button data-v="2">不知道</button></div>
+      <div id="refiOut"></div>
     </div>
 
     <!-- ⑤ 房子養出多少空間 -->
@@ -196,6 +207,20 @@
       </div>
     </div>
 
+    <!-- ⑦ 先跟原銀行談 -->
+    <div class="card">
+      <h2>第一步：先打給原本的銀行</h2>
+      <p class="muted">銀行最怕的不是你繳不出來，是你轉走。所以「先談」永遠是成本最低的一步。打電話前，先把這幾項準備好：</p>
+      <label class="chk"><input type="checkbox">寬限期確切哪個月到期（撥款通知書或網銀貸款明細）</label>
+      <label class="chk"><input type="checkbox">綁約期過了沒（沒過就轉走會有違約金）</label>
+      <label class="chk"><input type="checkbox">近一年信用卡、貸款有沒有遲繳過（有的話籌碼會少很多）</label>
+      <label class="chk"><input type="checkbox">先查 2～3 家別的銀行現在的房貸利率（談的時候要有比價）</label>
+      <label class="chk"><input type="checkbox">想清楚要談哪一件：延長寬限期？降利率？拉長年期？一次談一個</label>
+      <div class="say"><b>開場，講事實就好</b>「我的寬限期 ○ 月到期，到期後月付會從 ○ 萬變 ○ 萬。想請問行內有沒有延長寬限期或調整條件的方案？」</div>
+      <div class="say"><b>被打回票時，拿出比價</b>「我查過 ○○ 銀行轉貸利率是 ○%。我在這裡往來 ○ 年、從來沒遲繳，希望行內給我一個留下來的理由。」</div>
+      <div class="say"><b>收尾，要時間、要書面</b>「麻煩幫我送評估，大概幾個工作天會有結果？結果請用簡訊或 Email 通知我。」</div>
+      <p class="note">⚠️ 延長寬限期＝本金更晚開始還、總利息更多。它是「爭取時間」，不是省錢；談到了，那段時間要拿來安排下一步。</p>
+    </div>
   </div>
 
   <div class="card cta">
@@ -206,7 +231,7 @@
     </div>
   </div>
 
-  <footer><a href="/tools" style="color:inherit;font-size:.9rem;font-weight:700">← 看其他買房試算工具</a><br><br>
+  <footer>
     本試算採本息平均攤還估算，費用為常見行情參考，僅供參考。<br>
     實際月付、利率、轉貸條件與費用以各銀行核定與代書報價為準。｜版本：2026-09<br>
     © 2026 高雄房仲邱姐／邱靜慧
@@ -224,7 +249,7 @@ document.querySelectorAll('.seg').forEach(seg => seg.querySelectorAll('button').
   b.classList.add('on');
   if (!$('result').classList.contains('hide')) calc(false);
 })));
-['amt','rate','newRate','mv','income'].filter(id => $(id)).forEach(id => $(id).addEventListener('input', () => { if (!$('result').classList.contains('hide')) calc(false); }));
+['amt','rate','newRate','mv','income'].forEach(id => $(id).addEventListener('input', () => { if (!$('result').classList.contains('hide')) calc(false); }));
 
 let S = null;
 function calc(scroll){
@@ -249,7 +274,6 @@ function calc(scroll){
 
 /* 轉貸費用與回本月數 */
 function refiCalc(){
-  if (!$('refiOut')) return;
   const { P, r, Y, G } = S;
   const nr = (parseFloat($('newRate').value) || 0) / 100 / 12;
   const lock = segVal('lock');
@@ -309,7 +333,7 @@ function decide(){
   const stay = segVal('stay');
   if (stay === null){ $('a2').innerHTML = ''; q3.classList.add('hide'); return; }
   if (stay === '1'){
-    $('a2').innerHTML = `<div class="verdict ok">會住很久 → <b>轉貸重拉年期</b>。費用多久能回本，把條件傳給我，我幫你算清楚再決定。</div>`;
+    $('a2').innerHTML = `<div class="verdict ok">會住很久 → <b>轉貸重拉年期</b>。用上面的回本試算，回本快就轉，把月付壓回安全線。</div>`;
     q3.classList.add('hide'); return;
   }
   $('a2').innerHTML = `<div class="verdict warn">幾年內可能換屋、換城市的話，先別急著付轉貸的費用，往下看 Q3。</div>`;

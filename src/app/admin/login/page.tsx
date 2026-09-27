@@ -11,8 +11,11 @@ async function login(formData: FormData) {
   "use server";
 
   const password = String(formData.get("password") || "");
+  // 只接受站內 /admin/ 開頭的去處，避免被拿去轉址到外站
+  const nextRaw = String(formData.get("next") || "");
+  const next = /^\/admin\/[\w\-/]*$/.test(nextRaw) ? nextRaw : "/admin/appointments";
   if (!verifyAdminPassword(password)) {
-    redirect("/admin/login?e=1");
+    redirect(`/admin/login?e=1&next=${encodeURIComponent(next)}`);
   }
 
   const token = createAdminSessionToken();
@@ -28,17 +31,18 @@ async function login(formData: FormData) {
     path: "/",
     maxAge: ADMIN_SESSION_MAX_AGE,
   });
-  redirect("/admin/appointments");
+  redirect(next);
 }
 
 export default async function AdminLoginPage({
   searchParams,
 }: {
-  searchParams: Promise<{ e?: string }>;
+  searchParams: Promise<{ e?: string; next?: string }>;
 }) {
-  if (await isCurrentUserAdmin()) redirect("/admin/appointments");
+  const { e, next: nextRaw } = await searchParams;
+  const next = nextRaw && /^\/admin\/[\w\-/]*$/.test(nextRaw) ? nextRaw : "/admin/appointments";
+  if (await isCurrentUserAdmin()) redirect(next);
 
-  const { e } = await searchParams;
   const enabled = isAdminPasswordEnabled();
 
   return (
@@ -84,6 +88,7 @@ export default async function AdminLoginPage({
 
         {enabled ? (
           <form action={login}>
+            <input type="hidden" name="next" value={next} />
             <label htmlFor="password" style={{ display: "block", fontSize: 13, fontWeight: 700, marginBottom: 8 }}>
               後台密碼
             </label>
