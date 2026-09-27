@@ -60,12 +60,6 @@ function readGaClientId(): string {
   return parts.length >= 4 ? `${parts[2]}.${parts[3]}` : "";
 }
 
-const MODE_DESCRIPTIONS: Record<BookingMode, string> = {
-  realtor: "買賣、租賃、資產配置、稅務或其他不動產問題",
-  collaboration: "拍片、課程、品牌、媒體或商務合作",
-  interview: `應徵${OWNER.company}相關職務`,
-};
-
 const MODE_INTENTS: Record<BookingMode, IntentOption[]> = {
   realtor: [
     { key: "buy", label: "買房", description: "找自住、置產或換屋物件", apiIntent: "buy" },
@@ -230,9 +224,9 @@ function SectionHeading({
 }
 
 function Progress({ current }: { current: number }) {
-  const labels = ["目的", "需求", "方式", "時間", "資料"];
+  const labels = ["需求", "方式", "時間", "資料"];
   return (
-    <div className={styles.progress} aria-label={`預約進度：第 ${current} 步，共 5 步`}>
+    <div className={styles.progress} aria-label={`預約進度：第 ${current} 步，共 4 步`}>
       {labels.map((label, index) => (
         <div key={label} className={`${styles.progressItem} ${index + 1 <= current ? styles.progressItemActive : ""}`}>
           <span className={styles.progressBar} />
@@ -244,7 +238,9 @@ function Progress({ current }: { current: number }) {
 }
 
 export default function BookingForm() {
-  const [bookingMode, setBookingMode] = useState<BookingMode | "">("");
+  // 2026-09-28：邱姐拍板前台只收「房產諮詢」（一般房仲不是店東，合作洽談／面試不開放），
+  // 目的固定 realtor、第 1 步不顯示；collaboration / interview 的程式先保留給舊資料與後台顯示。
+  const [bookingMode] = useState<BookingMode | "">("realtor");
   const [intentKey, setIntentKey] = useState("");
   const [meetType, setMeetType] = useState("");
   const [days, setDays] = useState<OpenDay[]>([]);
@@ -341,14 +337,6 @@ export default function BookingForm() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const requestedMode = params.get("mode");
-    const initialMode: BookingMode | "" =
-      params.get("type") === "interview"
-        ? "interview"
-        : requestedMode === "realtor" || requestedMode === "collaboration" || requestedMode === "interview"
-          ? requestedMode
-          : "";
-    if (initialMode) setBookingMode(initialMode);
 
     try {
       const stored = JSON.parse(window.localStorage.getItem(PROFILE_KEY) || "{}") as Record<string, string>;
@@ -541,24 +529,13 @@ export default function BookingForm() {
     : [];
   const customReady = approvalState === "approved" && Boolean(approvedLocation);
 
-  const currentStep = !bookingMode
+  const currentStep = !intentKey
     ? 1
-    : !intentKey
+    : !meetType
       ? 2
-      : !meetType
+      : !selectedStart || !duration
         ? 3
-        : !selectedStart || !duration
-          ? 4
-          : 5;
-
-  const chooseMode = (mode: BookingMode) => {
-    setBookingMode(mode);
-    setIntentKey("");
-    setMeetType(approvalToken && customReady && mode !== "interview" ? "custom" : "");
-    setQualification({});
-    setErrors({});
-    track("mode_select", mode, mode);
-  };
+        : 4;
 
   const chooseIntent = (key: string) => {
     setIntentKey(key);
@@ -749,7 +726,7 @@ export default function BookingForm() {
       <main className={styles.page}>
         <div className={styles.shell}>
           <header className={styles.header}>
-            <div className={styles.brand}>高雄三民邱姐 ‧ {OWNER.company}</div>
+            <div className={styles.brand}>高雄房仲邱姐 ‧ {OWNER.company}</div>
             <h1 className={styles.title}>預約進度</h1>
           </header>
           <section className={`${styles.statusPanel} ${pending ? styles.statusPanelWarning : ""} ${expired ? styles.statusPanelDanger : ""}`}>
@@ -809,38 +786,18 @@ export default function BookingForm() {
     <main className={styles.page}>
       <div className={styles.shell}>
         <header className={styles.header}>
-          <div className={styles.brand}>高雄三民邱姐 ‧ {OWNER.company}</div>
+          <div className={styles.brand}>高雄房仲邱姐 ‧ {OWNER.company}</div>
           <h1 className={styles.title}>預約與邱姐聊聊</h1>
           <p className={styles.lead}>先告訴我這次要談什麼，系統只會顯示適合的方式、時長與必要問題。</p>
           <Progress current={currentStep} />
         </header>
 
         <form className={styles.form} onSubmit={submit} noValidate>
-          <section className={styles.section}>
-            <SectionHeading step={1} title="這次預約的目的是？" hint="先選類型，後面的問題才會符合你的情境。" />
-            <div className={styles.optionGrid} role="radiogroup" aria-label="預約目的">
-              {BOOKING_MODES.map((mode, index) => (
-                <button
-                  key={mode.key}
-                  ref={index === 0 ? registerRef("bookingMode") : undefined}
-                  type="button"
-                  role="radio"
-                  aria-checked={bookingMode === mode.key}
-                  className={`${styles.option} ${bookingMode === mode.key ? styles.optionActive : ""}`}
-                  onClick={() => chooseMode(mode.key)}
-                >
-                  <span className={styles.optionTitle}>{mode.label}</span>
-                  <span className={styles.optionDescription}>{MODE_DESCRIPTIONS[mode.key]}</span>
-                </button>
-              ))}
-            </div>
-            <FieldError message={errors.bookingMode} />
-          </section>
 
           {bookingMode ? (
             <section className={styles.section}>
               <SectionHeading
-                step={2}
+                step={1}
                 title={bookingMode === "interview" ? "想談哪一類職務？" : bookingMode === "collaboration" ? "合作方向是什麼？" : "主要需求是什麼？"}
                 hint="選最接近的一項即可，詳細內容會在最後補充。"
               />
@@ -866,7 +823,7 @@ export default function BookingForm() {
 
           {bookingMode && intentKey ? (
             <section className={styles.section}>
-              <SectionHeading step={3} title="希望怎麼談？" hint="不同方式會有不同提前時間與可預約時長。" />
+              <SectionHeading step={2} title="希望怎麼談？" hint="不同方式會有不同提前時間與可預約時長。" />
               <div className={`${styles.optionGrid} ${styles.optionGridTwo}`} role="radiogroup" aria-label="見面方式">
                 {meetingOptions.map((option, index) => {
                   const isCustom = option.key === "custom";
@@ -941,7 +898,7 @@ export default function BookingForm() {
           {meetType ? (
             <section className={styles.section}>
               <SectionHeading
-                step={4}
+                step={3}
                 title="選擇日期、時間與時長"
                 hint={`「${MEET_TYPES.find((option) => option.key === meetType)?.label || "目前方式"}」可選 ${appointmentMeetingPolicy(meetType).publicDurations.map(durationLabel).join("、")}。`}
               />
@@ -1038,7 +995,7 @@ export default function BookingForm() {
 
           {selectedStart && duration && bookingMode && selectedIntent ? (
             <section className={styles.section}>
-              <SectionHeading step={5} title="聯絡資料與必要背景" hint="Email 用來確認預約；LINE ID 選填，不需要留下私人 LINE 帳號密碼。" />
+              <SectionHeading step={4} title="聯絡資料與必要背景" hint="Email 用來確認預約；LINE ID 選填，不需要留下私人 LINE 帳號密碼。" />
               <div className={styles.twoColumn}>
                 <div className={styles.field}>
                   <label className={styles.label} htmlFor="booking-name">姓名</label>

@@ -250,7 +250,7 @@ export default function BookingManageClient({ token }: { token: string }) {
     <main className={styles.page}>
       <div className={styles.shell}>
         <header className={styles.header}>
-          <div className={styles.brand}>高雄三民邱姐</div>
+          <div className={styles.brand}>高雄房仲邱姐</div>
           <h1 className={styles.title}>管理我的預約</h1>
           <p className={styles.lead}>確認是否出席、查看時間，或在開放期限內改期與取消。</p>
         </header>
