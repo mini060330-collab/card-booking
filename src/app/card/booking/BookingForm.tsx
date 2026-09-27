@@ -61,14 +61,12 @@ function readGaClientId(): string {
 }
 
 const MODE_INTENTS: Record<BookingMode, IntentOption[]> = {
+  // 2026-09-28：邱姐拍板前台只留買房／賣房／租賃／其他；稅務、裝潢改由「其他」帶進來（不在預約頁承諾稅務意見）。
   realtor: [
     { key: "buy", label: "買房", description: "找自住、置產或換屋物件", apiIntent: "buy" },
     { key: "sell", label: "賣房", description: "估價、出售或換屋規劃", apiIntent: "sell" },
-    { key: "asset", label: "資產配置", description: "買賣時機、資金與置產規劃", apiIntent: "asset" },
-    { key: "tax", label: "稅務諮詢", description: "房地合一稅、土增稅、繼承過戶", apiIntent: "tax" },
-    { key: "reno", label: "簡易裝潢", description: "輕裝潢、局部翻新、抓預算", apiIntent: "reno" },
     { key: "rent", label: "租賃", description: "找出租物件或委託出租", apiIntent: "rent" },
-    { key: "other", label: "其他房產問題", description: "不確定分類也可以先說明", apiIntent: "other" },
+    { key: "other", label: "其他房產問題", description: "稅費、裝潢或不確定分類，都可以先寫下來", apiIntent: "other" },
   ],
   collaboration: [
     ...COLLABORATION_INTENTS.map((item) => ({ ...item, apiIntent: "other" as const })),
@@ -788,7 +786,7 @@ export default function BookingForm() {
         <header className={styles.header}>
           <div className={styles.brand}>高雄房仲邱姐 ‧ {OWNER.company}</div>
           <h1 className={styles.title}>預約與邱姐聊聊</h1>
-          <p className={styles.lead}>先告訴我這次要談什麼，系統只會顯示適合的方式、時長與必要問題。</p>
+          <p className={styles.lead}>選好想聊的事和時間，邱姐會準時跟你聯絡 😊</p>
           <Progress current={currentStep} />
         </header>
 
